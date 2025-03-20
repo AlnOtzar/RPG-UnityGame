@@ -18,9 +18,9 @@ public class MovCamara : MonoBehaviour
             this.transform.position = posicionPlayer;
         } 
         if(obj.gameObject.tag == "portal3"){
-            Vector3 posicioncamara = new Vector3(40,0,-10);
+            Vector3 posicioncamara = new Vector3(80,0,-10);
             camara.transform.position = posicioncamara;
-            Vector3 posicionPlayer = new Vector3(25,0,0);
+            Vector3 posicionPlayer = new Vector3(80,0,0);
             this.transform.position = posicionPlayer;
         }
         if(obj.gameObject.tag == "portal4"){

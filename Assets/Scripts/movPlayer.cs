@@ -16,7 +16,6 @@ public class movPlayer : MonoBehaviour
     private float ultimoMovX, ultimoMovY; 
     
     void FixedUpdate(){
-        Debug.Log("Hola mundo");
         Movimiento();
         Animacionesplayer();
     }
@@ -49,10 +48,8 @@ public class movPlayer : MonoBehaviour
     {
         if(PlayerMoviendose){
             activaCapa(capaCaminar);
-            Debug.Log("Caminando");
         }else{
             activaCapa(capaIdle);
-            Debug.Log("Idle");
         }
     }
 
