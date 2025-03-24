@@ -50,5 +50,8 @@ TagManager:
   - name: Enemigo
     uniqueID: 1695394987
     locked: 0
+  - name: NPCs
+    uniqueID: 1677188191
+    locked: 0
   m_RenderingLayers:
   - Default
