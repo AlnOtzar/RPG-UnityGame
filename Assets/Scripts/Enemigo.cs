@@ -91,12 +91,12 @@ public class Enemigo : MonoBehaviour
         if (this.transform.position.x > mirarHacia.position.x)
         {
             spriteEnemigo.flipX = true;
-            Debug.Log("FlipX");
+            
         }
         else
         {
             spriteEnemigo.flipX = false;
-            Debug.Log("Sin FlipX");
+            
         }
     }
 

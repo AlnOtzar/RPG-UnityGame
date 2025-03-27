@@ -12,7 +12,7 @@ public class movPlayer : MonoBehaviour
     public static bool estaMuerto = false;  // Variable global para saber si el jugador está muerto
 
 
-    private string capaIdle = "Idle";
+    private string capaIdle = "idle";
     private string capaCaminar = "Caminar";
     private bool PlayerMoviendose = false;
     private float ultimoMovX, ultimoMovY;
