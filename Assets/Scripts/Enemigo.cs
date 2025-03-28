@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI; // Se agregó esta línea para usar NavMeshAgent
+using UnityEngine.AI;
 
-// Script de Unity | Creferencias
 public class Enemigo : MonoBehaviour
 {
+    public SpawnerDeEnemigos spawner;
+
     public static int vidaEnemigo = 1;
     private float frecAtaque = 2.5f, tiempoSigAtaque = 0, iniciaConteo;
 
@@ -16,47 +17,34 @@ public class Enemigo : MonoBehaviour
     private bool playerEnRango = false;
     [SerializeField] private float distanciaDeteccionPlayer;
     private SpriteRenderer spriteEnemigo;
-    private Transform mirarHacia;
+    private Animator animator;  // ✅ Agregado para manejar las animaciones
+    private Vector3 ultimaPosicion; 
 
     private void Awake()
     {
         agente = GetComponent<NavMeshAgent>();
         spriteEnemigo = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();  
     }
 
-    // Mensaje de Unity | referencias
     void Start()
     {
         vidaEnemigo = 1;
-        agente.updateRotation = false; // Corregido el nombre de la variable 'agemte'
+        agente.updateRotation = false;
         agente.updateUpAxis = false;
+        ultimaPosicion = transform.position; 
     }
 
-    // Mensaje de Unity | U referencias
     void Update()
     {
         this.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+
         float distancia = Vector3.Distance(personaje.position, this.transform.position);
+        playerEnRango = distancia < distanciaDeteccionPlayer;
 
-        if (this.transform.position == puntosRuta[indiceRuta].position)
+        if (agente.remainingDistance <= 0.1f && !playerEnRango) 
         {
-            if (indiceRuta < puntosRuta.Length - 1)
-            {
-                indiceRuta++;
-            }
-            else if (indiceRuta == puntosRuta.Length - 1)
-            {
-                indiceRuta = 0;
-            }
-        }
-
-        if (distancia < distanciaDeteccionPlayer)
-        {
-            playerEnRango = true;
-        }
-        else
-        {
-            playerEnRango = false;
+            indiceRuta = (indiceRuta + 1) % puntosRuta.Length; 
         }
 
         if (tiempoSigAtaque > 0)
@@ -68,7 +56,7 @@ public class Enemigo : MonoBehaviour
             tiempoSigAtaque = 0;
             VidasPlayer.puedePerderVida = 1;
             SigueAlPlayer(playerEnRango);
-            RotaEnemigo(); // Corregido el nombre de la función
+            ActualizarAnimaciones();  // ✅ Actualiza el Animator
         }
     }
 
@@ -77,33 +65,33 @@ public class Enemigo : MonoBehaviour
         if (playerEnRango)
         {
             agente.SetDestination(personaje.position);
-            mirarHacia = personaje;
         }
         else
         {
             agente.SetDestination(puntosRuta[indiceRuta].position);
-            mirarHacia = puntosRuta[indiceRuta];
         }
     }
 
-    private void RotaEnemigo()
+    private void ActualizarAnimaciones()
     {
-        if (this.transform.position.x > mirarHacia.position.x)
+        Vector3 direccionMovimiento = transform.position - ultimaPosicion;
+        ultimaPosicion = transform.position;
+
+        // Detectar si el enemigo se está moviendo
+        animator.SetBool("isMoving", direccionMovimiento.magnitude > 0.1f);
+
+        // Actualizar valores de movX y movY en el Animator
+        if (direccionMovimiento.magnitude > 0.1f)
         {
-            spriteEnemigo.flipX = true;
-            
-        }
-        else
-        {
-            spriteEnemigo.flipX = false;
-            
+            animator.SetFloat("movX", direccionMovimiento.x);
+            animator.SetFloat("movY", direccionMovimiento.y);
         }
     }
 
-    // Mensaje de Unity | C nelerencias
+
     private void OnTriggerEnter2D(Collider2D obj)
     {
-        if (obj.tag == "Player")
+        if (obj.CompareTag("Player"))
         {
             tiempoSigAtaque = frecAtaque;
             iniciaConteo = Time.time;
@@ -116,7 +104,10 @@ public class Enemigo : MonoBehaviour
         vidaEnemigo -= daño;
         if (vidaEnemigo <= 0)
         {
+            spawner.EnemigoEliminado(); // Avisar al spawner
             Destroy(gameObject);
         }
     }
+
 }
+
