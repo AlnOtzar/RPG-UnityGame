@@ -1,35 +1,54 @@
 using UnityEngine;
-using TMPro;  // Importa la librería de TextMeshPro
-using UnityEngine.UI;
 
 public class NPCInteraction : MonoBehaviour
 {
-    public GameObject interactionPanel;  // Panel de interacción
-    public TextMeshProUGUI npcText;  // Texto que se mostrará con TextMeshPro
-    public float interactDistance = 0.8f;  // Distancia para interactuar
-    public string npcMessage = "¡Hola! ¿Cómo estás?";  // En el inspector deberemos modificar cada mensaje
+    public string[] lines;
+    public Sprite imagenNPC;
+    public string nombreNPC;
+    public float interactDistance = 0.2f;
 
     private Transform player;
+    private bool playerInRange = false;
+    private bool dialogueActive = false;
 
-    void Start()
+    private void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;  // Encuentra al jugador
-        interactionPanel.SetActive(false);  // Asegúrate de que el panel esté oculto al inicio
+        player = GameObject.FindWithTag("Player").transform;
     }
 
-    void Update()
+    private void Update()
     {
-        // Calcula la distancia entre el NPC y el jugador
         float distance = Vector3.Distance(player.position, transform.position);
 
-        if (distance < interactDistance)  // Si el jugador está cerca
+        if (distance < interactDistance && !dialogueActive)
         {
-            interactionPanel.SetActive(true);  // Muestra el panel
-            npcText.text = npcMessage;  // Muestra el mensaje
+            DialogueManager.Instance.ShowPressEPanel(this, transform.position + new Vector3(0, 1.5f, 0));  
+            playerInRange = true;
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                StartDialogue();
+            }
         }
-        else
+        else if (playerInRange)  
         {
-            interactionPanel.SetActive(false);  // Oculta el panel cuando el jugador se aleja, a cada npc le debemos agregar el panel y el texto
+            DialogueManager.Instance.HidePressEPanel(this);
+            playerInRange = false;
+        }
+    }
+
+    private void StartDialogue()
+    {
+        dialogueActive = true;
+        DialogueManager.Instance.StartDialogue(nombreNPC, imagenNPC, lines, EndDialogue);
+    }
+
+    private void EndDialogue()
+    {
+        dialogueActive = false;
+        if (playerInRange)  
+        {
+            DialogueManager.Instance.ShowPressEPanel(this, transform.position + new Vector3(0, 1.5f, 0));
         }
     }
 }
