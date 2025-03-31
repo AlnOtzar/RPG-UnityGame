@@ -13,6 +13,9 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+Assets/Scenes/SampleScene.unity
+Assets/Scenes/SampleScene.unity.meta
+
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

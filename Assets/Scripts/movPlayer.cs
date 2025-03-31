@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class movPlayer : MonoBehaviour
 {
+    private bool puedeMoverse = true;
     private Vector2 dirMov;
     public float velMov;
     public Rigidbody2D rb;
     public Animator anim;
+
+    bool Ataque;
     public static bool estaMuerto = false;  // Variable global para saber si el jugador está muerto
 
 
@@ -19,8 +22,12 @@ public class movPlayer : MonoBehaviour
      
     
     void FixedUpdate(){
-        Movimiento();
-        Animacionesplayer();
+        if (puedeMoverse)
+        {
+            Movimiento();
+            Animacionesplayer();
+        }
+        
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Movimiento()
@@ -44,12 +51,20 @@ public class movPlayer : MonoBehaviour
             ultimoMovY = movY;
         }
         ActualizaCapa();
+        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            anim.Play("Ataque");
+            Ataque = true;
+        }
     }
 
 
     // Update is called once per frame
     private void Animacionesplayer()
     {
+        if (Ataque) return;
+
         anim.SetFloat("movX", ultimoMovX);
         anim.SetFloat("movY", ultimoMovY);
     }
@@ -72,6 +87,17 @@ public class movPlayer : MonoBehaviour
         anim.SetLayerWeight(anim.GetLayerIndex(nombre), 1);
 
     }
+    public void BloquearMovimiento(bool estado)
+    {
+        puedeMoverse = !estado;  // Si estado es true, el jugador no se mueve
+        rb.linearVelocity = Vector2.zero;  // Detener al jugador de inmediato
+        
+    }
     
+    private void EndAtaque()
+    {
+        Ataque = false;
+        ActualizaCapa();
+    }
 
 }
