@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class movPlayer : MonoBehaviour
 {
     private bool puedeMoverse = true;
@@ -11,93 +10,92 @@ public class movPlayer : MonoBehaviour
     public Rigidbody2D rb;
     public Animator anim;
 
-    bool Ataque;
-    public static bool estaMuerto = false;  // Variable global para saber si el jugador está muerto
-
-
+    public static bool estaMuerto = false;
     private string capaIdle = "idle";
     private string capaCaminar = "Caminar";
     private bool PlayerMoviendose = false;
     private float ultimoMovX, ultimoMovY;
-     
-    
-    void FixedUpdate(){
+
+    private PlayerAttack playerAttack; // Referencia al script de ataque
+
+    void Start()
+    {
+        playerAttack = GetComponent<PlayerAttack>(); // Obtiene el script de ataque
+    }
+
+    void FixedUpdate()
+    {
         if (puedeMoverse)
         {
             Movimiento();
             Animacionesplayer();
         }
-        
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     private void Movimiento()
     {
-        if (estaMuerto){
+        if (estaMuerto || playerAttack.IsAttacking()) // Verifica si está atacando
+        {
             rb.linearVelocity = Vector2.zero;
             return;
-
-        } // Si está muerto, no mover al personaje
+        }
 
         float movX = Input.GetAxisRaw("Horizontal");
         float movY = Input.GetAxisRaw("Vertical");
         dirMov = new Vector2(movX, movY).normalized;
-        rb.linearVelocity = new Vector2(dirMov.x * velMov, dirMov.y * velMov); // Corregido "linearVelocity" a "velocity" para Rigidbody2D
+        rb.linearVelocity = new Vector2(dirMov.x * velMov, dirMov.y * velMov);
 
-        if (movX == 0 && movY == 0) { // Idle
+        if (movX == 0 && movY == 0)
+        {
             PlayerMoviendose = false;
-        } else { // Caminar
+        }
+        else
+        {
             PlayerMoviendose = true;
             ultimoMovX = movX;
             ultimoMovY = movY;
         }
+
         ActualizaCapa();
-        
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            anim.Play("Ataque");
-            Ataque = true;
-        }
-    }
-
-
-    // Update is called once per frame
-    private void Animacionesplayer()
-    {
-        if (Ataque) return;
-
-        anim.SetFloat("movX", ultimoMovX);
-        anim.SetFloat("movY", ultimoMovY);
     }
 
     private void ActualizaCapa()
     {
-        if(PlayerMoviendose){
+        if (PlayerMoviendose)
+        {
             activaCapa(capaCaminar);
-        }else{
+        }
+        else
+        {
             activaCapa(capaIdle);
         }
     }
 
     private void activaCapa(string nombre)
     {
-        for(int i=0; i < anim.layerCount; i++){
-            anim.SetLayerWeight(i,0); //ambos con weight peso cero
-
+        for (int i = 0; i < anim.layerCount; i++)
+        {
+            anim.SetLayerWeight(i, 0);
         }
         anim.SetLayerWeight(anim.GetLayerIndex(nombre), 1);
-
     }
+
+    private void Animacionesplayer()
+    {
+        if (playerAttack.IsAttacking()) return;
+
+        anim.SetFloat("movX", ultimoMovX);
+        anim.SetFloat("movY", ultimoMovY);
+    }
+
     public void BloquearMovimiento(bool estado)
     {
-        puedeMoverse = !estado;  // Si estado es true, el jugador no se mueve
-        rb.linearVelocity = Vector2.zero;  // Detener al jugador de inmediato
-        
-    }
-    
-    private void EndAtaque()
-    {
-        Ataque = false;
-        ActualizaCapa();
+        puedeMoverse = !estado;
+        rb.linearVelocity = Vector2.zero;
     }
 
+    public Vector2 GetUltimaDireccion()
+    {
+        return new Vector2(ultimoMovX, ultimoMovY);
+    }
 }

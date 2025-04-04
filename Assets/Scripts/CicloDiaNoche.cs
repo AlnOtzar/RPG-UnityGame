@@ -14,7 +14,7 @@ public class CicloDiaNoche : MonoBehaviour
         float progreso = Mathf.PingPong(tiempo / duracionDia, 1); // Oscila entre 0 y 1
 
         // Cambia la intensidad de la luz
-        luzGlobal.intensity = Mathf.Lerp(1.3f, 0.3f, progreso); // De noche (0.3) a día (1)
+        luzGlobal.intensity = Mathf.Lerp(1.3f, 0.4f, progreso); // De noche (0.3) a día (1)
 
         // Cambia el color de la luz (de azul oscuro a amarillo)
         luzGlobal.color = Color.Lerp(new Color(1f, 1f, 1f), new Color(.03f, 0.06f, 0.3f), progreso);

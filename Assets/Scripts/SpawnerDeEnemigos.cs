@@ -4,7 +4,7 @@ using UnityEngine;
 public class SpawnerDeEnemigos : MonoBehaviour
 {
     public GameObject enemigoPrefab; // Prefab del enemigo
-    public Vector2 areaDeSpawnMin; // Rango mínimo del área donde pueden aparecer
+    public Vector2 areaDeSpawnMin; // Rango mínimo del área donde pueden aparecer, aqui deber poner las coordenadas tanto minimas como maximas
     public Vector2 areaDeSpawnMax; // Rango máximo del área donde pueden aparecer
     public int cantidadMaxima = 5; // Máximo de enemigos simultáneos
     public float tiempoRespawn = 3f; // Tiempo para que reaparezca un enemigo
@@ -13,8 +13,8 @@ public class SpawnerDeEnemigos : MonoBehaviour
 
     void Start()
     {
-        // Spawnear enemigos iniciales
-        for (int i = 0; i < cantidadMaxima; i++)
+        
+        for (int i = 0; i < cantidadMaxima; i++) //aparece un enemigo hasta llegar al limite
         {
             SpawnearEnemigo();
         }
@@ -24,7 +24,6 @@ public class SpawnerDeEnemigos : MonoBehaviour
     {
         if (enemigosActuales >= cantidadMaxima) return;
 
-        // Genera una posición aleatoria dentro del rango dado
         float randomX = Random.Range(areaDeSpawnMin.x, areaDeSpawnMax.x);
         float randomY = Random.Range(areaDeSpawnMin.y, areaDeSpawnMax.y);
         Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
@@ -32,6 +31,7 @@ public class SpawnerDeEnemigos : MonoBehaviour
         GameObject nuevoEnemigo = Instantiate(enemigoPrefab, spawnPosition, Quaternion.identity);
         
         // Referencia al script de enemigo para que notifique cuando muera
+        //aqui debes poner el de tus enemigos
         Enemigo scriptEnemigo = nuevoEnemigo.GetComponent<Enemigo>();
         scriptEnemigo.spawner = this;
 
@@ -44,7 +44,7 @@ public class SpawnerDeEnemigos : MonoBehaviour
         StartCoroutine(RespawnEnemigo());
     }
 
-    private IEnumerator RespawnEnemigo()
+    private IEnumerator RespawnEnemigo() //tiempo que tarda en aparecer
     {
         yield return new WaitForSeconds(tiempoRespawn);
         SpawnearEnemigo();
