@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 6937817954938267909, guid: ba04070bf78ced54fa10b1e5432a890c, type: 3}
+  m_Sprite: {fileID: -5130558894233647175, guid: 82ed0649ea6067149b16976a4ea168fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -861,7 +861,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5086458757861956760, guid: bfbf2f7df5705b3489428ab756162df1, type: 3}
+  m_Sprite: {fileID: 415574774, guid: aca0b6d35122e16419e39775966ffe60, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -917,7 +917,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1850139591}
-  - component: {fileID: 1850139590}
   m_Layer: 0
   m_Name: Escenas
   m_TagString: Untagged
@@ -925,18 +924,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1850139590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1850139589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40fe355ec3fd82046ba93625db5505b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1850139591
 Transform:
   m_ObjectHideFlags: 0
