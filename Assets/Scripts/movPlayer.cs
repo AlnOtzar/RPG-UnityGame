@@ -10,17 +10,17 @@ public class movPlayer : MonoBehaviour
     public Rigidbody2D rb;
     public Animator anim;
 
-    public static bool estaMuerto = false;
+    public bool estaMuerto = false;
     private string capaIdle = "idle";
     private string capaCaminar = "Caminar";
     private bool PlayerMoviendose = false;
     private float ultimoMovX, ultimoMovY;
 
-    private PlayerAttack playerAttack; // Referencia al script de ataque
+    private PlayerAttack playerAttack; 
 
     void Start()
     {
-        playerAttack = GetComponent<PlayerAttack>(); // Obtiene el script de ataque
+        playerAttack = GetComponent<PlayerAttack>(); 
     }
 
     void FixedUpdate()
@@ -34,7 +34,7 @@ public class movPlayer : MonoBehaviour
 
     private void Movimiento()
     {
-        if (estaMuerto || playerAttack.IsAttacking()) // Verifica si está atacando
+        if (estaMuerto || playerAttack.IsAttacking()) 
         {
             rb.linearVelocity = Vector2.zero;
             return;

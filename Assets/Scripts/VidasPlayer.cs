@@ -5,45 +5,57 @@ using UnityEngine.UI;
 
 public class VidasPlayer : MonoBehaviour
 {
-    public movPlayer movimientoPlayer;  // Referencia al script movPlayer
+    public movPlayer movimientoPlayer; 
     public int defensa = 1;
+
+    [Header("Vida")]
     public Image vidaPlayer;
     private float anchoVidasPlayer;
-    public static int vida;
+    public int vidasMax = 20;
+    public int vidaActual;
+    public TextMeshProUGUI textoVida; 
+
+    [Header("Muerte y Game Over")]
     private bool haMuerto;
     public GameObject gameOver;
-    private int vidasMax = 20;
-    public int vidaActual;
+    public GameObject animacionMuerteCanvas;
     public static int puedePerderVida = 1;
-    public GameObject animacionMuerteCanvas; // Arrastrar en el Inspector
+
+    [Header("Experiencia y Nivel")]
     public int experienciaParaSubir = 100;
     public int experienciaActual = 0;
     public int nivel = 1;
-    public Slider barraXP;  // Asocia esto con un Slider para la barra de XP
+    public Slider barraXP;
     public TextMeshProUGUI textoNivel;
 
     void Start()
     {
         anchoVidasPlayer = vidaPlayer.GetComponent<RectTransform>().sizeDelta.x;
         haMuerto = false;
-        vida = vidasMax;
+        vidaActual = vidasMax;
+
         gameOver.SetActive(false);
         ActualizarUI();
+        DibujaVida(vidaActual);
     }
 
     public void TomarDaño(int daño)
     {
-        if (vida > 0 && puedePerderVida == 1)
+        if (vidaActual > 0 && puedePerderVida == 1)
         {
             puedePerderVida = 0;
 
             int dañoReducido = daño - defensa;
             dañoReducido = Mathf.Max(0, dañoReducido);
 
-            vida -= dañoReducido;
-            DibujaVida(vida);
+            vidaActual -= dañoReducido;
+            vidaActual = Mathf.Clamp(vidaActual, 0, vidasMax);
+
+            DibujaVida(vidaActual);
+            ActualizarUI();
         }
-        if (vida <= 0 && !haMuerto)
+
+        if (vidaActual <= 0 && !haMuerto)
         {
             haMuerto = true;
             StartCoroutine(EjecutaMuerte());
@@ -52,23 +64,35 @@ public class VidasPlayer : MonoBehaviour
 
     private void DibujaVida(int vida)
     {
-        RectTransform transformaImagen = vidaPlayer.GetComponent<RectTransform>();
-        transformaImagen.sizeDelta = new Vector2
-        (anchoVidasPlayer * (float)vida / (float)vidasMax, transformaImagen.sizeDelta.y);
+        if (vidaPlayer == null) return;
+
+        RectTransform rt = vidaPlayer.GetComponent<RectTransform>();
+        float porcentajeVida = (float)vida / vidasMax;
+
+        // Cambiar el tamaño de la barra
+        rt.sizeDelta = new Vector2(anchoVidasPlayer * porcentajeVida, rt.sizeDelta.y);
+
+        // Cambiar el color según el porcentaje
+        if (porcentajeVida <= 0.3f)
+            vidaPlayer.color = Color.red;
+        else if (porcentajeVida <= 0.6f)
+            vidaPlayer.color = Color.yellow;
+        else
+            vidaPlayer.color = new Color(.14f, 0.72f, 0.071f);
     }
+
 
     IEnumerator EjecutaMuerte()
     {
-        GetComponent<SpriteRenderer>().enabled = false; // Ocultar el personaje en la escena
-        GetComponent<Collider2D>().enabled = false; // Desactivar colisiones para evitar errores
-        
-        movPlayer.estaMuerto = true; // Usar el nombre de la clase para acceder a la variable estática
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
 
-        animacionMuerteCanvas.SetActive(true); // Activar la animación en el Canvas
+        movimientoPlayer.estaMuerto = true;
+        animacionMuerteCanvas.SetActive(true);
 
-        yield return new WaitForSeconds(0); // Esperar a que termine la animación
+        yield return new WaitForSeconds(0);
 
-        gameOver.SetActive(true); // Mostrar la pantalla de Game Over
+        gameOver.SetActive(true);
     }
 
     public void AumentarDefensa(int cantidad)
@@ -79,25 +103,18 @@ public class VidasPlayer : MonoBehaviour
     public void RecibirXP(int cantidadXP)
     {
         experienciaActual += cantidadXP;
-
-        // Limita la experiencia a no exceder el máximo
-        if (experienciaActual > experienciaParaSubir)
-        {
-            experienciaActual = experienciaParaSubir;
-        }
+        experienciaActual = Mathf.Min(experienciaActual, experienciaParaSubir);
 
         ActualizarUI();
     }
 
     void Update()
     {
-        // Actualiza la barra de XP
         if (barraXP != null)
         {
-            barraXP.value = (float)experienciaActual / experienciaParaSubir; // Actualiza la barra de XP con el valor correspondiente
+            barraXP.value = (float)experienciaActual / experienciaParaSubir;
         }
 
-        // Si la experiencia alcanza el máximo necesario para subir de nivel
         if (experienciaActual >= experienciaParaSubir)
         {
             SubirDeNivel();
@@ -107,35 +124,36 @@ public class VidasPlayer : MonoBehaviour
     public void SubirDeNivel()
     {
         nivel++;
-        vidasMax += 10; // Aumenta la vida máxima al subir de nivel
-        vidaActual = vidasMax; // Restaura la vida al máximo
+        vidasMax += 10;
+        vidaActual = vidasMax;
 
-        // Probabilidad de mejorar la defensa en un 30%
         if (Random.value <= 0.3f)
         {
-            defensa += 5; // Aumenta la defensa
+            defensa += 1;
         }
 
-        // Aumenta la experiencia necesaria para el siguiente nivel
         experienciaActual -= experienciaParaSubir;
-        experienciaParaSubir = Mathf.RoundToInt(experienciaParaSubir * 1.2f); // Se aumenta la cantidad de XP necesaria para el siguiente nivel
+        experienciaParaSubir = Mathf.RoundToInt(experienciaParaSubir * 1.3f);
 
         ActualizarUI();
+        DibujaVida(vidaActual);
     }
 
-    // Actualiza el texto y la UI cuando sube de nivel
     void ActualizarUI()
     {
-        // Actualiza el texto del nivel
         if (textoNivel != null)
         {
             textoNivel.text = $"Nivel: {nivel}";
         }
 
-        // Actualiza la barra de XP
         if (barraXP != null)
         {
-            barraXP.value = (float)experienciaActual / experienciaParaSubir; // Actualiza la barra de XP
+            barraXP.value = (float)experienciaActual / experienciaParaSubir;
+        }
+
+        if (textoVida != null)
+        {
+            textoVida.text = $"{vidaActual} / {vidasMax}";
         }
     }
 }
