@@ -28,6 +28,11 @@ public class VidasPlayer : MonoBehaviour
     public Slider barraXP;
     public TextMeshProUGUI textoNivel;
 
+    
+    [Header("MuesicaMuerte")]
+    public AudioSource musicaMuerte;
+    
+
     void Start()
     {
         anchoVidasPlayer = vidaPlayer.GetComponent<RectTransform>().sizeDelta.x;
@@ -37,6 +42,7 @@ public class VidasPlayer : MonoBehaviour
         gameOver.SetActive(false);
         ActualizarUI();
         DibujaVida(vidaActual);
+
     }
 
     public void TomarDaño(int daño)
@@ -84,6 +90,11 @@ public class VidasPlayer : MonoBehaviour
 
     IEnumerator EjecutaMuerte()
     {
+
+        if (musicaMuerte != null){
+            musicaMuerte.Play();
+            }
+
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
 
