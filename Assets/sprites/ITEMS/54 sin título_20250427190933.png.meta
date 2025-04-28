@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: a09327e4996e0c74383c89cd51bbf0c6
+guid: 84b2934064bfa554d99aa0355c4f7ffc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6860531085079851665
-    second: "30 sin t\xEDtulo_20250330190410_0"
-  - first:
-      213: -7767125309807721614
-    second: "30 sin t\xEDtulo_20250330190410_1"
-  - first:
-      213: 5587723023086444725
-    second: "30 sin t\xEDtulo_20250330190410_2"
+      213: 1850438946540003566
+    second: "54 sin t\xEDtulo_20250427190933_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -57,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 25
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -102,71 +96,53 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "30 sin t\xEDtulo_20250330190410_0"
+      name: "54 sin t\xEDtulo_20250427190933_0"
       rect:
         serializedVersion: 2
-        x: 5
-        y: 223
-        width: 5
-        height: 19
+        x: 70
+        y: 86
+        width: 392
+        height: 287
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f6d4a47a35f7ac0a0800000000000000
-      internalID: -6860531085079851665
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "30 sin t\xEDtulo_20250330190410_1"
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 222
-        width: 12
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 27307f6cea0a53490800000000000000
-      internalID: -7767125309807721614
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "30 sin t\xEDtulo_20250330190410_2"
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 222
-        width: 12
-        height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5b0e6560c749b8d40800000000000000
-      internalID: 5587723023086444725
+      spriteID: ee0a017fa641ea910800000000000000
+      internalID: 1850438946540003566
       vertices: []
       indices: 
       edges: []
@@ -175,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e976cca1f41f9d24c89c6930630801ab
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -185,9 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "30 sin t\xEDtulo_20250330190410_0": -6860531085079851665
-      "30 sin t\xEDtulo_20250330190410_1": -7767125309807721614
-      "30 sin t\xEDtulo_20250330190410_2": 5587723023086444725
+      "54 sin t\xEDtulo_20250427190933_0": 1850438946540003566
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
