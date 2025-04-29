@@ -68,17 +68,15 @@ public class VidasPlayer : MonoBehaviour
         }
     }
 
-    private void DibujaVida(int vida)
+    public void DibujaVida(int vida)
     {
         if (vidaPlayer == null) return;
 
         RectTransform rt = vidaPlayer.GetComponent<RectTransform>();
-        float porcentajeVida = (float)vida / vidasMax;
+        float porcentajeVida = (float)Mathf.Min(vida, vidasMax) / vidasMax;
 
-        // Cambiar el tamaño de la barra
         rt.sizeDelta = new Vector2(anchoVidasPlayer * porcentajeVida, rt.sizeDelta.y);
 
-        // Cambiar el color según el porcentaje
         if (porcentajeVida <= 0.3f)
             vidaPlayer.color = Color.red;
         else if (porcentajeVida <= 0.6f)
@@ -86,6 +84,7 @@ public class VidasPlayer : MonoBehaviour
         else
             vidaPlayer.color = new Color(.14f, 0.72f, 0.071f);
     }
+
 
 
     IEnumerator EjecutaMuerte()

@@ -18,6 +18,10 @@ TagManager:
   - portal12
   - portal13
   - Arma
+  - vida
+  - mana
+  - carne
+  - moneda
   layers:
   - Default
   - TransparentFX

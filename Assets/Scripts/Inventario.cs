@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Inventario : MonoBehaviour
 {
-    private bool muestraInventario;
+    private bool muestraInventario;   
     public GameObject goInventario;
 
     void Start()
@@ -13,11 +13,7 @@ public class Inventario : MonoBehaviour
         muestraInventario = false;
     }
 
-    void Update()
-    {
-
-    }
-
+    
     public void StatusInventario()
     {
 
@@ -36,4 +32,5 @@ public class Inventario : MonoBehaviour
         }
     
     }
+
 }
