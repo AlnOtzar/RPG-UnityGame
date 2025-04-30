@@ -22,6 +22,10 @@ TagManager:
   - mana
   - carne
   - moneda
+  - slime
+  - arco
+  - espada
+  - gema
   layers:
   - Default
   - TransparentFX

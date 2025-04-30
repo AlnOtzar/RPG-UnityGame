@@ -6,12 +6,17 @@ using UnityEngine.UI;
 public class ColeccionablesPlayer : MonoBehaviour
 {
     private GameObject player;
-    [SerializeField]private int[] valoresInventario; // 0-sin elemento, # elemento diferente a cero
+    // [SerializeField]private int[] valoresInventario; // 0-sin elemento, # elemento diferente a cero
+    private Inventario inventario;
+    public static string objColeccionar;
+
 
     void Start()
     {
         player = GameObject.Find("Player");   
         BorraArreglo();     
+        objColeccionar = "";
+        inventario = FindObjectOfType<Inventario>();
     }
 
     private void OnTriggerEnter2D(Collider2D obj){
@@ -31,6 +36,8 @@ public class ColeccionablesPlayer : MonoBehaviour
 
         if(obj.tag == "mana" ){
             Destroy(obj.gameObject);
+
+            // aumentarmana
             
 
         }
@@ -49,16 +56,34 @@ public class ColeccionablesPlayer : MonoBehaviour
 
         }
         if(obj.tag == "moneda" ){
-            Destroy(obj.gameObject);
+            AplicaCambios(obj);
+
+        }
+        if(obj.tag == "slime" ){
+            AplicaCambios(obj);
+
+        }
+        if(obj.tag == "arco" ){
+            AplicaCambios(obj);
+
+        }
+        if(obj.tag == "espada" ){
+            AplicaCambios(obj);
 
         }
     }
 
-    private void BorraArreglo(){
-        for(int i=0; i < valoresInventario.Length; i++){
-            valoresInventario[i] = 0;
+    // private void BorraArreglo(){
+    //     for(int i=0; i < valoresInventario.Length; i++){
+    //         valoresInventario[i] = 0;
+    //     }
+    // }
 
-        }
+    private void AplicaCambios(Collider2D obj){
+        objColeccionar = obj.tag;
+        inventario.EscribeEnArreglo();
+        Destroy(obj.gameObject);
+
     }
 
 }
