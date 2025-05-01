@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class ColeccionablesPlayer : MonoBehaviour
 {
+    /*
     private GameObject player;
     // [SerializeField]private int[] valoresInventario; // 0-sin elemento, # elemento diferente a cero
     private Inventario inventario;
@@ -85,5 +85,5 @@ public class ColeccionablesPlayer : MonoBehaviour
         Destroy(obj.gameObject);
 
     }
-
+    */
 }

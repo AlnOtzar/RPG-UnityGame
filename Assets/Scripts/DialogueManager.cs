@@ -5,24 +5,24 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
-    public static DialogueManager Instance; //Patron Singleton si ya hay una instancia del manager en la escena, esta se destruye
+    public static DialogueManager Instance;
 
-    public GameObject dialoguePanel; //Panel principal
-    public GameObject pressEPanel; //Panel de E
-    public TextMeshProUGUI npcText; //Texto Panel
-    public TextMeshProUGUI npcNombre; //TextoNombre
-    public Image imagenNPC; //Imagen NPC
-    public float textSpeed = 0.05f; //velocidad, mientras mas cerca a 0 mas rapido
+    public GameObject dialoguePanel; 
+    public GameObject pressEPanel; 
+    public TextMeshProUGUI npcText; 
+    public TextMeshProUGUI npcNombre; 
+    public Image imagenNPC; 
+    public float textSpeed = 0.05f; 
 
 
-    private string[] lines; //Lineas del dialogo
-    private int index; //cuenta de la linea actual
-    private bool isWriting = false; //para indicar si el texto se esta escribiendo
+    private string[] lines;
+    private int index;
+    private bool isWriting = false;
     private System.Action onDialogueEnd;
 
-    private NPCInteraction currentNPC;  // Referencia al NPC que activó el panel
+    private NPCInteraction currentNPC; 
 
-    private void Awake() //La instancia que se destruye si ya hay una activa
+    private void Awake() 
     {
         if (Instance == null)
             Instance = this;
@@ -30,13 +30,13 @@ public class DialogueManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void Start() //los paneles se descativan automaticamente
+    private void Start()
     {
         dialoguePanel.SetActive(false);
         pressEPanel.SetActive(false);
     }
 
-    public void ShowPressEPanel(NPCInteraction npc, Vector3 position) //basicamente es el panel E, sirve para mostrarlo cuando nos acercamos al npc
+    public void ShowPressEPanel(NPCInteraction npc, Vector3 position) //mostrar el panel
     {
         if (currentNPC == null || npc == currentNPC)  
         {
@@ -59,9 +59,9 @@ public class DialogueManager : MonoBehaviour
     {
         pressEPanel.SetActive(false);  //El panel se oculta al presionar E
 
-        index = 0; //lleva la cuenta del dialogo
+        index = 0; 
         lines = dialogos;
-        onDialogueEnd = callback; //llama a una funcion cuando el dialogo se acaba
+        onDialogueEnd = callback;
 
         npcNombre.text = nombre;
         imagenNPC.sprite = imagen;

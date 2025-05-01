@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class VidasPlayer : MonoBehaviour
 {
-    public movPlayer movimientoPlayer; 
+    public movPlayer movimientoPlayer;
     public int defensa = 1;
 
     [Header("Vida")]
@@ -13,7 +13,7 @@ public class VidasPlayer : MonoBehaviour
     private float anchoVidasPlayer;
     public int vidasMax = 20;
     public int vidaActual;
-    public TextMeshProUGUI textoVida; 
+    public TextMeshProUGUI textoVida;
 
     [Header("Muerte y Game Over")]
     private bool haMuerto;
@@ -28,10 +28,8 @@ public class VidasPlayer : MonoBehaviour
     public Slider barraXP;
     public TextMeshProUGUI textoNivel;
 
-    
-    [Header("MuesicaMuerte")]
+    [Header("Música Muerte")]
     public AudioSource musicaMuerte;
-    
 
     void Start()
     {
@@ -42,7 +40,6 @@ public class VidasPlayer : MonoBehaviour
         gameOver.SetActive(false);
         ActualizarUI();
         DibujaVida(vidaActual);
-
     }
 
     public void TomarDaño(int daño)
@@ -85,14 +82,10 @@ public class VidasPlayer : MonoBehaviour
             vidaPlayer.color = new Color(.14f, 0.72f, 0.071f);
     }
 
-
-
     IEnumerator EjecutaMuerte()
     {
-
-        if (musicaMuerte != null){
+        if (musicaMuerte != null)
             musicaMuerte.Play();
-            }
 
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
@@ -121,14 +114,10 @@ public class VidasPlayer : MonoBehaviour
     void Update()
     {
         if (barraXP != null)
-        {
             barraXP.value = (float)experienciaActual / experienciaParaSubir;
-        }
 
         if (experienciaActual >= experienciaParaSubir)
-        {
             SubirDeNivel();
-        }
     }
 
     public void SubirDeNivel()
@@ -138,9 +127,7 @@ public class VidasPlayer : MonoBehaviour
         vidaActual = vidasMax;
 
         if (Random.value <= 0.3f)
-        {
             defensa += 1;
-        }
 
         experienciaActual -= experienciaParaSubir;
         experienciaParaSubir = Mathf.RoundToInt(experienciaParaSubir * 1.3f);
@@ -152,18 +139,12 @@ public class VidasPlayer : MonoBehaviour
     void ActualizarUI()
     {
         if (textoNivel != null)
-        {
             textoNivel.text = $"Nivel: {nivel}";
-        }
 
         if (barraXP != null)
-        {
             barraXP.value = (float)experienciaActual / experienciaParaSubir;
-        }
 
         if (textoVida != null)
-        {
             textoVida.text = $"{vidaActual} / {vidasMax}";
-        }
     }
 }

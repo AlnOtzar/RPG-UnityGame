@@ -9,8 +9,6 @@ public class Enemigo : MonoBehaviour
 
     public int xpAlDerrotar = 20;
     public int vidaEnemigo = 5;
-    private VidasPlayer jugador;
-
 
     private float frecAtaque = 1.5f, tiempoSigAtaque = 0, iniciaConteo;
 
@@ -22,35 +20,29 @@ public class Enemigo : MonoBehaviour
     [SerializeField] private float distanciaDeteccionPlayer;
     private SpriteRenderer spriteEnemigo;
     private Animator animator;
-    private Vector3 ultimaPosicion; 
 
     private void Awake()
     {
         agente = GetComponent<NavMeshAgent>();
         spriteEnemigo = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();  
+        animator = GetComponent<Animator>();
     }
 
     void Start()
     {
-        jugador = GameObject.FindWithTag("Player").GetComponent<VidasPlayer>(); // Busca al jugador
         indiceRuta = Random.Range(0, puntosRuta.Length);
         agente.updateRotation = false;
         agente.updateUpAxis = false;
-        ultimaPosicion = transform.position; 
     }
 
     void Update()
     {
-        float distancia = Vector3.Distance(personaje.position, this.transform.position);
+        float distancia = Vector3.Distance(personaje.position, transform.position);
         playerEnRango = distancia < distanciaDeteccionPlayer;
 
-        // Elimina la línea que ajusta la posición Z
-        // this.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-
-        if (agente.remainingDistance <= 0.1f && !playerEnRango) 
+        if (agente.remainingDistance <= 0.1f && !playerEnRango)
         {
-            indiceRuta = (indiceRuta + 1) % puntosRuta.Length; 
+            indiceRuta = (indiceRuta + 1) % puntosRuta.Length;
         }
 
         if (tiempoSigAtaque > 0)
@@ -62,7 +54,7 @@ public class Enemigo : MonoBehaviour
             tiempoSigAtaque = 0;
             VidasPlayer.puedePerderVida = 1;
             SigueAlPlayer(playerEnRango);
-            ActualizarAnimaciones();  // ✅ Actualiza el Animator
+            ActualizarAnimaciones();
         }
     }
 
@@ -80,46 +72,59 @@ public class Enemigo : MonoBehaviour
 
     private void ActualizarAnimaciones()
     {
-        // Usar agente.velocity para detectar el movimiento
         float velocidad = agente.velocity.magnitude;
         animator.SetBool("isMoving", velocidad > 0.1f);
 
         if (velocidad > 0.1f)
         {
-            Vector3 direccionMovimiento = agente.velocity.normalized; // Obtén la dirección normalizada
+            Vector3 direccionMovimiento = agente.velocity.normalized;
             animator.SetFloat("movX", direccionMovimiento.x);
             animator.SetFloat("movY", direccionMovimiento.y);
         }
     }
 
-    // Método para detectar las colisiones con el jugador y con la espada
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            // El jugador está tocando al enemigo, hacerle daño
             tiempoSigAtaque = frecAtaque;
             iniciaConteo = Time.time;
-            col.transform.GetComponentInChildren<VidasPlayer>().TomarDaño(1);
+
+            // ✅ Buscar VidasPlayer en el padre del objeto con el que colisionamos
+            VidasPlayer vida = col.GetComponentInParent<VidasPlayer>();
+            if (vida != null)
+            {
+                vida.TomarDaño(1);
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró VidasPlayer en el objeto con el que colisionó el enemigo.");
+            }
         }
         else if (col.CompareTag("Arma"))
         {
-            // Buscar el daño directamente desde el player
             PlayerAttack jugador = GameObject.FindWithTag("Player").GetComponentInChildren<PlayerAttack>();
             int daño = jugador.dañoJugador;
             TomarDaño(daño);
         }
     }
 
-    // Método para aplicar el daño al enemigo
+
     public void TomarDaño(int daño)
     {
         vidaEnemigo -= daño;
         if (vidaEnemigo <= 0)
         {
-            jugador.RecibirXP(Random.Range(10, xpAlDerrotar + 1)); // XP aleatorio entre 10 y xpAlDerrotar
-            spawner.EnemigoEliminado(); // Avisar al spawner que el enemigo fue eliminado
-            Destroy(gameObject);  // Eliminar el objeto enemigo
+            VidasPlayer vida = GameObject.FindWithTag("Player").GetComponent<VidasPlayer>();
+            if (vida != null)
+            {
+                vida.RecibirXP(Random.Range(10, xpAlDerrotar + 1));
+            }
+
+            if (spawner != null)
+                spawner.EnemigoEliminado();
+
+            Destroy(gameObject);
         }
     }
 }

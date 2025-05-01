@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class movPlayer : MonoBehaviour
 {
+    private Animator anim;
+    public GameObject[] personajes; 
+    private int indicePersonaje = 0; 
+
     private bool puedeMoverse = true;
     private Vector2 dirMov;
-    public float velMov;
+
+    public float velocidadNormal = 3f;
+    public float velocidadCorrer = 6f;
+    private bool estaCorriendo = false;
+
     public Rigidbody2D rb;
-    public Animator anim;
 
     public bool estaMuerto = false;
     private string capaIdle = "idle";
@@ -16,11 +23,12 @@ public class movPlayer : MonoBehaviour
     private bool PlayerMoviendose = false;
     private float ultimoMovX, ultimoMovY;
 
-    private PlayerAttack playerAttack; 
+    private PlayerAttack playerAttack;
 
     void Start()
     {
-        playerAttack = GetComponent<PlayerAttack>(); 
+        playerAttack = GetComponent<PlayerAttack>();
+        ActivarPersonajeActual(); 
     }
 
     void FixedUpdate()
@@ -34,7 +42,7 @@ public class movPlayer : MonoBehaviour
 
     private void Movimiento()
     {
-        if (estaMuerto || playerAttack.IsAttacking()) 
+        if (estaMuerto || playerAttack.IsAttacking())
         {
             rb.linearVelocity = Vector2.zero;
             return;
@@ -43,7 +51,11 @@ public class movPlayer : MonoBehaviour
         float movX = Input.GetAxisRaw("Horizontal");
         float movY = Input.GetAxisRaw("Vertical");
         dirMov = new Vector2(movX, movY).normalized;
-        rb.linearVelocity = new Vector2(dirMov.x * velMov, dirMov.y * velMov);
+
+        estaCorriendo = Input.GetKey(KeyCode.LeftShift);
+        float velocidadActual = estaCorriendo ? velocidadCorrer : velocidadNormal;
+
+        rb.linearVelocity = dirMov * velocidadActual;
 
         if (movX == 0 && movY == 0)
         {
@@ -73,10 +85,13 @@ public class movPlayer : MonoBehaviour
 
     private void activaCapa(string nombre)
     {
+        if (anim == null) return;
+
         for (int i = 0; i < anim.layerCount; i++)
         {
             anim.SetLayerWeight(i, 0);
         }
+
         anim.SetLayerWeight(anim.GetLayerIndex(nombre), 1);
     }
 
@@ -86,6 +101,7 @@ public class movPlayer : MonoBehaviour
 
         anim.SetFloat("movX", ultimoMovX);
         anim.SetFloat("movY", ultimoMovY);
+        anim.SetBool("corriendo", estaCorriendo); 
     }
 
     public void BloquearMovimiento(bool estado)
@@ -97,5 +113,34 @@ public class movPlayer : MonoBehaviour
     public Vector2 GetUltimaDireccion()
     {
         return new Vector2(ultimoMovX, ultimoMovY);
+    }
+
+    private void ActivarPersonajeActual()
+    {
+        for (int i = 0; i < personajes.Length; i++)
+        {
+            personajes[i].SetActive(i == indicePersonaje);
+        }
+
+        anim = personajes[indicePersonaje].GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CambiarPersonaje();
+        }
+    }
+
+    private void CambiarPersonaje()
+    {
+        personajes[indicePersonaje].SetActive(false);
+
+        indicePersonaje = (indicePersonaje + 1) % personajes.Length;
+
+        personajes[indicePersonaje].SetActive(true);
+
+        anim = personajes[indicePersonaje].GetComponent<Animator>();
     }
 }

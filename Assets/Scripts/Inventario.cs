@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Inventario : MonoBehaviour
 {
+    /*
     private bool muestraInventario;   
     public GameObject goInventario;
 
@@ -127,5 +128,5 @@ public class Inventario : MonoBehaviour
             valoresInventario[i] = "";
         }
     }
-
+    */
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     private bool isAttacking;
-    private float cooldownAtaque = 0.5f;
+    private float cooldownAtaque = 1f;
     private float tiempoUltimoAtaque = 0f;
 
     private Collider2D espadaCollider;
@@ -27,16 +27,32 @@ public class PlayerAttack : MonoBehaviour
 
     private void Atacar()
     {
-        if (isAttacking || Time.time < tiempoUltimoAtaque + cooldownAtaque) return; // Cooldown activo
+        if (isAttacking || Time.time < tiempoUltimoAtaque + cooldownAtaque) return;
+
+        // 🔍 Buscar el personaje activo y su Animator
+        anim = GetAnimatorPersonajeActivo();
+        if (anim == null) return;
 
         isAttacking = true;
-        playerMovement.BloquearMovimiento(true); // 🚀 Bloquea movimiento
+        playerMovement.BloquearMovimiento(true);
         anim.SetTrigger("Atacar");
         anim.SetBool("isAttacking", true);
         tiempoUltimoAtaque = Time.time;
 
-        StartCoroutine(ForceEndAttack(1.0f)); // 🚀 Seguridad extra
     }
+
+    private Animator GetAnimatorPersonajeActivo()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                return child.GetComponent<Animator>();
+            }
+        }
+        return null;
+    }
+
 
     private IEnumerator ForceEndAttack(float tiempoMaximo)
     {
