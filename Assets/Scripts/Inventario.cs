@@ -5,128 +5,151 @@ using UnityEngine.UI;
 
 public class Inventario : MonoBehaviour
 {
-    /*
+    [Header("Configuración")]
     private bool muestraInventario;   
     public GameObject goInventario;
-
-    [SerializeField] private string[] valoresInventario; 
-    // "" - Sin elemento, string Elemento
     
-    private int numMonedas, numGemasVerdes, numGemasAzules, 
-            numGemasRojas, numGemasAmarilla, numGemasRosa,numPocionesVida, 
-            numPocionesMana, numSlimes;
-    Button boton; // Botones del inventario
-    public Sprite TrofeoRata, TrofeoSlime, Espada, 
-            Arco, gemaRoja, gemaVerde, gemaAzul, gemaAmarilla, gemaRosa, 
-            pocionVida, pocionMana;
+    [Header("Contadores")]
+    private int numTrofeosRata, numTrofeosSlime, numGemasVerdes, 
+                numGemasAzules, numGemasAmarilla, numGemasRosa,
+                numGemasRojas, numMonedas, numSlimes;
 
+    [Header("Referencias UI")]
+    [SerializeField] private Button[] botonesInventario;
+    
+    [Header("Sprites de Items")]
+    [SerializeField] private Sprite vida, mana, carne, moneda, slime, Arco, Espada, 
+                         trofeoRata, trofeoSlime, gemaRoja, gemaVerde, gemaAzul, 
+                         gemaAmarilla, gemaRosa;
+
+    [Header("Datos")]
+    public static string[] valoresInventario;
 
     void Start()
     {
-        muestraInventario = false;
-        BorraArreglo();
-        numMonedas = 0; 
-        numGemasVerdes = 0; 
-        numGemasAzules = 0; 
-        numGemasRojas = 0;
-        numGemasAmarilla = 0; 
-        numGemasRosa = 0;
-        numPocionesVida = 0; 
-        numPocionesMana = 0; 
-        numSlimes = 0;
-
+        InicializarInventario();
     }
 
-    
-    public void StatusInventario()
+    private void InicializarInventario()
     {
-        if (muestraInventario){
-            muestraInventario = false;
-            goInventario.SetActive(false);
-            Time.timeScale = 1;
-        }else{
-            muestraInventario = true;
-            goInventario.SetActive(true);
-            Time.timeScale = 0;
+        muestraInventario = false;
+        BorraArreglo();
+        ResetContadores();
+        
+        // Opcional: Buscar automáticamente los botones si no se asignan desde el inspector
+        if(botonesInventario == null || botonesInventario.Length == 0)
+        {
+            botonesInventario = GetComponentsInChildren<Button>();
         }
     }
 
-    public void EscribeEnArreglo(){
-        if (VerificaEnArreglo() == -1) { // No está en el inventario
-            for (int i = 0; i < valoresInventario.Length; i++) {
-                if (valoresInventario[i] == "") { // Lo coloca en la primera posición
+    private void ResetContadores()
+    {
+        numTrofeosRata = 0;
+        numTrofeosSlime = 0;
+        numGemasVerdes = 0; 
+        numGemasAzules = 0; 
+        numGemasAmarilla = 0;
+        numGemasRosa = 0; 
+        numGemasRojas = 0;
+        numMonedas = 0; 
+        numSlimes = 0;
+    }
+
+    public void StatusInventario()
+    {
+        muestraInventario = !muestraInventario;
+        goInventario.SetActive(muestraInventario);
+        Time.timeScale = muestraInventario ? 0 : 1;
+    }
+
+    public void EscribeEnArreglo()
+    {
+        int pos = VerificaEnArreglo();
+        if(pos == -1) // No está en el inventario
+        { 
+            for(int i = 0; i < valoresInventario.Length; i++)
+            {
+                if(valoresInventario[i] == "")
+                {
                     valoresInventario[i] = ColeccionablesPlayer.objAcoleccionar;
                     DibujaElementos(i);
                     break;
                 }
             }
-        }else{ // Si ya está en el inventario, ubica su posición y suma uno al elemento
-        DibujaElementos(VerificaEnArreglo());
+        }
+        else // Si ya está en el inventario
+        {
+            DibujaElementos(pos);
         }
     }
 
-    private int VerificaEnArreglo() {
-        int pos = -1;
-        for (int i = 0; i < valoresInventario.Length; i++) {
-            if (valoresInventario[i] == ColeccionablesPlayer.objAcoleccionar) {
-                pos = i;
-                break;
+    private int VerificaEnArreglo()
+    {
+        for(int i = 0; i < valoresInventario.Length; i++)
+        {
+            if(valoresInventario[i] == ColeccionablesPlayer.objAcoleccionar)
+            {
+                return i;
             }
         }
-        return pos;
+        return -1;
     }
 
-    public void DibujalEmentos(int pos) {
-    StatusInventario();  
-    boton = GameObject.Find("elemento ("+pos+")").GetComponent<Button>();
-    switch (ColeccionablesPlayer.objAcoleccionar) {
-        // me quede en el min 17:47 donde hablaba de los tags
-        case "trofeoRata":
-            contenedor = mochila;
-            break;
-        case "trofeoSlime":
-            contenedor = sobre;
-            break;
-        case "Espada":
-            contenedor = Espada;
-            break;
-        case "Arco":
-            contenedor = Arco;
-            break;
-        case "gemaRoja":
-            contenedor = gemaRoja;
-            break;
-        case "gemaVerde":
-            contenedor = gemaVerde;
-            break;
-        case "gemaAzul":
-            contenedor = gemaAzul;
-            break;
-        case "gemaAmarilla":
-            contenedor = gemaAmarilla;
-            break;
-        case "gemaRosa":
-            contenedor = gemaRosa;
-            break;
-        case "pocionVida":
-            contenedor = pocionVida;
-            break;
-        case "pocionMana":
-            contenedor = pocionMana;
-            break;
-        case "gemaRoja":
-            contenedor = gemaRoja;
-            numGemasRojas++;
-            boton.GetComponentInChildrensText>().text = "x" + numGemasRojas.ToString();
-            break;
-        "---"
+    public void DibujaElementos(int pos)
+    {
+        if(pos < 0 || pos >= botonesInventario.Length)
+        {
+            Debug.LogError("Índice de inventario fuera de rango: " + pos);
+            return;
+        }
 
-    
+        Button boton = botonesInventario[pos];
+        Image imagen = boton.GetComponent<Image>();
+        Text texto = boton.GetComponentInChildren<Text>();
 
-    private void BorraArreglo(){
-        for(int i = 0; i < valoresInventario.Length; i++){
+        string item = ColeccionablesPlayer.objAcoleccionar;
+        
+        switch(item)
+        {
+            case "trofeoRata":
+                imagen.sprite = trofeoRata;
+                texto.text = $"x{++numTrofeosRata}";
+                break;
+                
+            case "trofeoSlime":
+                imagen.sprite = trofeoSlime;
+                texto.text = $"x{++numTrofeosSlime}";
+                break;
+                
+            case "Espada":
+                imagen.sprite = Espada;
+                texto.text = ""; // Limpiar texto si es un item único
+                break;
+                
+            case "Arco":
+                imagen.sprite = Arco;
+                texto.text = "";
+                break;
+                
+            case "gemaVerde":
+                imagen.sprite = gemaVerde;
+                texto.text = $"x{++numGemasVerdes}";
+                break;
+                
+            // ... otros casos similares
+                
+            default:
+                Debug.LogWarning($"Item no reconocido: {item}");
+                break;
+        }
+    }
+
+    public void BorraArreglo()
+    {
+        for(int i = 0; i < valoresInventario.Length; i++)
+        {
             valoresInventario[i] = "";
         }
     }
-    */
 }

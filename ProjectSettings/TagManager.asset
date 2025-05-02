@@ -17,15 +17,20 @@ TagManager:
   - portal11
   - portal12
   - portal13
-  - Arma
   - vida
   - mana
   - carne
   - moneda
   - slime
-  - arco
-  - espada
-  - gema
+  - trofeoRata
+  - trofeoSlime
+  - Espada
+  - Arco
+  - gemaVerde
+  - gemaAzul
+  - gemaAmarilla
+  - gemaRosa
+  - gemaRoja
   layers:
   - Default
   - TransparentFX
