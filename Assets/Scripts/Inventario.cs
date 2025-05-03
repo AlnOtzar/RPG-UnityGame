@@ -40,7 +40,7 @@
 //         // numPocionesMana = 0; 
 //         numSlimes = 0;
 
-//         valoresInventario = new string[8]; // o el tamaño que necesites
+//         valoresInventario = new string[20]; // o el tamaño que necesites
 
 
 //     }
