@@ -1,11 +1,35 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-// public class Inventario : MonoBehaviour
-// {
-//     private bool muestraInventario;   
+public class Inventario : MonoBehaviour
+{
+    public InventarioSlot[] inventarioSlots;
+    public GameObject inventarioItemPrefab;
+
+    public void AgregarItem(Items items){
+        for (int i = 0; i < inventarioSlots.Length; i++){
+            InventarioSlot slot = inventarioSlots[i];
+            ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+
+            if (itemEnSlot == null){
+                SpawnNuevoItem(items, slot);
+                return;
+            }
+        }
+    }
+
+    void  SpawnNuevoItem (Items items, InventarioSlot slot){
+        GameObject newItemGo = Instantiate(inventarioItemPrefab, slot.transform);
+        ColeccionablesPlayer item = newItemGo.GetComponent<ColeccionablesPlayer>();
+        item.InicializarItem(items);
+         
+    }
+
+}
+
+//private bool muestraInventario;   
 //     public GameObject goInventario;
 //     private Sprite contenedor;
 
@@ -167,4 +191,3 @@
 //             valoresInventario[i] = "";
 //         }
 //     }
-// }
