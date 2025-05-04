@@ -9,6 +9,7 @@ public class Enemigo : MonoBehaviour
 
     public int xpAlDerrotar = 20;
     public int vidaEnemigo = 5;
+    public int dañoEnemigo = 0;
 
     private float frecAtaque = 1.5f, tiempoSigAtaque = 0, iniciaConteo;
 
@@ -94,7 +95,7 @@ public class Enemigo : MonoBehaviour
             VidasPlayer vida = col.GetComponentInParent<VidasPlayer>();
             if (vida != null)
             {
-                vida.TomarDaño(1);
+                vida.TomarDaño(dañoEnemigo);
             }
             else
             {

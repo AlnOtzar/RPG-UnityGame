@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class SpawnerDeEnemigos : MonoBehaviour
 {
-    public GameObject enemigoPrefab; // Prefab del enemigo
-    public Vector2 areaDeSpawnMin; // Rango mínimo del área donde pueden aparecer, aqui deber poner las coordenadas tanto minimas como maximas
-    public Vector2 areaDeSpawnMax; // Rango máximo del área donde pueden aparecer
-    public int cantidadMaxima = 5; // Máximo de enemigos simultáneos
-    public float tiempoRespawn = 3f; // Tiempo para que reaparezca un enemigo
+    public GameObject enemigoPrefab; 
+    public Vector2 areaDeSpawnMin; 
+    public Vector2 areaDeSpawnMax; 
+    public int cantidadMaxima = 5; 
+    public float tiempoRespawn = 3f; 
 
     private int enemigosActuales = 0;
 

@@ -7,6 +7,7 @@ public class PlayerAttack : MonoBehaviour
     private float cooldownAtaque = 1f;
     private float tiempoUltimoAtaque = 0f;
 
+    public GameObject flecha;
     private Collider2D espadaCollider;
     public Animator anim;
     private movPlayer playerMovement;
@@ -54,15 +55,6 @@ public class PlayerAttack : MonoBehaviour
     }
 
 
-    private IEnumerator ForceEndAttack(float tiempoMaximo)
-    {
-        yield return new WaitForSeconds(tiempoMaximo);
-        if (isAttacking) // Si el evento no se ejecutó, forzar EndAttack
-        {
-            EndAttack();
-        }
-    }
-
     public void EndAttack()
     {
         isAttacking = false;
@@ -80,6 +72,30 @@ public class PlayerAttack : MonoBehaviour
         dañoJugador += cantidad;
         dañoJugador = Mathf.Clamp(dañoJugador, 1, 999); // evita que sea 0 o negativo
     }
+
+    public void DisparoFlecha()
+{
+    Vector2 direction = new Vector2(anim.GetFloat("movX"), anim.GetFloat("movY")).normalized;
+
+    if (direction == Vector2.zero)
+    {
+        direction = Vector2.right; 
+    }
+
+    GameObject obj = Instantiate(flecha);
+
+    obj.transform.position = transform.position + new Vector3(direction.x, direction.y, 0) * 0.5f;
+
+    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    obj.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+    Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
+    if (rb != null)
+    {
+        rb.linearVelocity = direction * 10f;
+    }
+}
+
 
 }
 
