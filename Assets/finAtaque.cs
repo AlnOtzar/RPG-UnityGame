@@ -14,4 +14,15 @@ public class finAtaque : MonoBehaviour
             Debug.LogWarning("Player no asignado");
         }
     }
+
+    public void generarFlecha()
+    {
+        if (ataqueJugador !=null)
+        {
+            ataqueJugador.DisparoFlecha();
+        }
+        else{
+            Debug.LogWarning("Player no asignado");
+        }
+    }
 }
