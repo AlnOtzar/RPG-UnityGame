@@ -20,7 +20,7 @@ public class Inventario : MonoBehaviour
         }
     }
 
-    void  SpawnNuevoItem (Items items, InventarioSlot slot){
+    public void  SpawnNuevoItem (Items items, InventarioSlot slot){
         GameObject newItemGo = Instantiate(inventarioItemPrefab, slot.transform);
         ColeccionablesPlayer item = newItemGo.GetComponent<ColeccionablesPlayer>();
         item.InicializarItem(items);
