@@ -6,6 +6,10 @@ using UnityEngine.AI;
 public class Enemigo : MonoBehaviour
 {
     public SpawnerDeEnemigos spawner;
+    public GameObject prefabDropEnemigo;
+    public GameObject prefabDropMoneda;
+
+    public GameObject monedas;
 
     public int xpAlDerrotar = 20;
     public int vidaEnemigo = 5;
@@ -34,6 +38,9 @@ public class Enemigo : MonoBehaviour
         indiceRuta = Random.Range(0, puntosRuta.Length);
         agente.updateRotation = false;
         agente.updateUpAxis = false;
+        agente.avoidancePriority = Random.Range(0, 100); 
+        agente.stoppingDistance = 0.5f;
+
     }
 
     void Update()
@@ -120,8 +127,19 @@ public class Enemigo : MonoBehaviour
             if (vida != null)
             {
                 vida.RecibirXP(Random.Range(10, xpAlDerrotar + 1));
+                
+            }
+            if (prefabDropEnemigo != null && Random.value <= 0.2f)
+            {
+                Instantiate(prefabDropEnemigo, transform.position + Vector3.right * 0.3f, Quaternion.identity);
             }
 
+            int cantidadMonedas = Random.Range(1, 3);
+            for (int i = 0; i < cantidadMonedas; i++)
+            {
+                Vector3 offset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0f);
+                Instantiate(prefabDropMoneda, transform.position + offset, Quaternion.identity);
+            }
             if (spawner != null)
                 spawner.EnemigoEliminado();
 

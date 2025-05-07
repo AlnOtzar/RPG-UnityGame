@@ -14,8 +14,27 @@ public class PRUEBAagregar : MonoBehaviour
         } else {
             Debug.Log("item NO agregado");
         }
-
     }
+     private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Inventario inventoryManager = other.GetComponentInChildren<Inventario>();
 
+            if (inventoryManager != null)
+            {
+                bool result = inventoryManager.AgregarItem(itemsToPickup[0]);
+
+                if (result)
+                {
+                    Debug.Log("ITEM AGREGADO");
+                    Destroy(gameObject); 
+                }
+                else
+                {
+                    Debug.Log("item NO agregado");
+                }
+            }
+        }
+    }
 }
-
