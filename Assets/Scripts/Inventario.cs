@@ -8,16 +8,17 @@ public class Inventario : MonoBehaviour
     public InventarioSlot[] inventarioSlots;
     public GameObject inventarioItemPrefab;
 
-    public void AgregarItem(Items items){
+    public bool AgregarItem(Items items){
         for (int i = 0; i < inventarioSlots.Length; i++){
             InventarioSlot slot = inventarioSlots[i];
             ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
 
             if (itemEnSlot == null){
                 SpawnNuevoItem(items, slot);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     public void  SpawnNuevoItem (Items items, InventarioSlot slot){

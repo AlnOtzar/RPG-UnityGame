@@ -6,11 +6,16 @@ public class PRUEBAagregar : MonoBehaviour
     public Items[] itemsToPickup;
 
     public void PickupItem(int id) {
-            Debug.Log("Intentando recoger item con ID: " + id);
+        
+        bool result = inventoryManager.AgregarItem(itemsToPickup[id]);
 
-        inventoryManager.AgregarItem(itemsToPickup[id]);
+        if(result == true){
+            Debug.Log("ITEM AGREGADO");
+        } else {
+            Debug.Log("item NO agregado");
+        }
+
     }
-
 
 }
 
