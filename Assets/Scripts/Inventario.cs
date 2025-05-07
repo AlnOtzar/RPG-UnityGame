@@ -5,10 +5,28 @@ using UnityEngine.UI;
 
 public class Inventario : MonoBehaviour
 {
+    public int maxStackItems = 9;
     public InventarioSlot[] inventarioSlots;
     public GameObject inventarioItemPrefab;
 
     public bool AgregarItem(Items items){
+        
+        // revisa si un slot tiene un item mas de una vez
+        for (int i = 0; i < inventarioSlots.Length; i++){
+            InventarioSlot slot = inventarioSlots[i];
+            ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+
+            if (itemEnSlot != null && 
+                itemEnSlot.items == items &&
+                itemEnSlot.count < maxStackItems){
+
+                itemEnSlot.count++;
+                itemEnSlot.RecargarContador();
+                return true;
+            }
+        }
+
+        // busca un espacio vacio
         for (int i = 0; i < inventarioSlots.Length; i++){
             InventarioSlot slot = inventarioSlots[i];
             ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
@@ -24,7 +42,7 @@ public class Inventario : MonoBehaviour
     public void  SpawnNuevoItem (Items items, InventarioSlot slot){
         GameObject newItemGo = Instantiate(inventarioItemPrefab, slot.transform);
         ColeccionablesPlayer item = newItemGo.GetComponent<ColeccionablesPlayer>();
-        item.InicializarItem(items);
+        item.InicializarItem(items); 
          
     }
 

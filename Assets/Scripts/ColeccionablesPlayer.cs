@@ -9,13 +9,22 @@ public class ColeccionablesPlayer : MonoBehaviour, IBeginDragHandler, IDragHandl
 
     [Header("UI")]
     public Image image;
+    public Text countText;
 
     [HideInInspector]public Items items;
+    [HideInInspector] public int count = 1;
     [HideInInspector] public Transform despuesDeArrastrar;
 
     public void InicializarItem(Items newItem){
         items = newItem;
         image.sprite = newItem.image;
+        RecargarContador();
+    }
+
+    public void RecargarContador(){
+        countText.text = count.ToString();
+        bool textActive = count > 1;
+        countText.gameObject.SetActive(textActive);
     }
 
     // Drag and drop
