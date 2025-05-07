@@ -11,7 +11,7 @@ public class Enemigo : MonoBehaviour
     public int vidaEnemigo = 5;
     public int dañoEnemigo = 0;
 
-    private float frecAtaque = 1.5f, tiempoSigAtaque = 0, iniciaConteo;
+    private float frecAtaque = 1.5f, tiempoSigAtaque = 1, iniciaConteo;
 
     public Transform personaje;
     private NavMeshAgent agente;
@@ -86,29 +86,29 @@ public class Enemigo : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
-        {
-            tiempoSigAtaque = frecAtaque;
-            iniciaConteo = Time.time;
-
-            // ✅ Buscar VidasPlayer en el padre del objeto con el que colisionamos
-            VidasPlayer vida = col.GetComponentInParent<VidasPlayer>();
-            if (vida != null)
-            {
-                vida.TomarDaño(dañoEnemigo);
-            }
-            else
-            {
-                Debug.LogWarning("No se encontró VidasPlayer en el objeto con el que colisionó el enemigo.");
-            }
-        }
-        else if (col.CompareTag("Arma"))
+        if (col.CompareTag("Arma"))
         {
             PlayerAttack jugador = GameObject.FindWithTag("Player").GetComponentInChildren<PlayerAttack>();
             int daño = jugador.dañoJugador;
             TomarDaño(daño);
         }
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && Time.time >= iniciaConteo + frecAtaque)
+        {
+            iniciaConteo = Time.time;
+
+            VidasPlayer vida = collision.GetComponentInParent<VidasPlayer>();
+            if (vida != null)
+            {
+                vida.TomarDaño(dañoEnemigo);
+            }
+        }
+    }
+
+
 
 
     public void TomarDaño(int daño)

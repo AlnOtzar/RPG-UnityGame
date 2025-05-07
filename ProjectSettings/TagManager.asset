@@ -31,6 +31,8 @@ TagManager:
   - gemaAmarilla
   - gemaRosa
   - gemaRoja
+  - Arma
+  - Enemigos
   layers:
   - Default
   - TransparentFX
