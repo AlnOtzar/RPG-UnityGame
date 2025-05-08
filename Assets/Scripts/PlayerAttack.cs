@@ -1,3 +1,4 @@
+
 using System.Collections;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class PlayerAttack : MonoBehaviour
     public Animator anim;
     private movPlayer playerMovement;
     public int dañoJugador = 1;
+    public VidasPlayer energia;
 
     void Start()
     {
@@ -73,27 +75,34 @@ public class PlayerAttack : MonoBehaviour
 
     public void DisparoFlecha()
     {
-        Vector2 direction = new Vector2(anim.GetFloat("movX"), anim.GetFloat("movY")).normalized;
-
-        if (direction == Vector2.zero)
+        anim = GetAnimatorPersonajeActivo();
+        if(energia.energiaActual > 0)
         {
-            direction = Vector2.right; 
+            energia.energiaActual -= 1;
+            energia.ActualizarUI();
+            energia.DibujaEnergia(energia.energiaActual);
+            Vector2 direction = new Vector2(anim.GetFloat("movX"), anim.GetFloat("movY")).normalized;
+
+            if (direction == Vector2.zero)
+            {
+                direction = Vector2.right; 
+            }
+
+            GameObject obj = Instantiate(flecha);
+
+            obj.transform.position = transform.position + new Vector3(direction.x, direction.y, 0) * 2f;
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            obj.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+            Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = direction * 10f;
+            }
         }
-
-        GameObject obj = Instantiate(flecha);
-
-        obj.transform.position = transform.position + new Vector3(direction.x, direction.y, 0) * 2f;
-
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        obj.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.linearVelocity = direction * 10f;
-        }
+        
     }
 
 
 }
-

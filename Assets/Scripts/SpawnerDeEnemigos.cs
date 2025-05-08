@@ -14,7 +14,7 @@ public class SpawnerDeEnemigos : MonoBehaviour
     void Start()
     {
         
-        for (int i = 0; i < cantidadMaxima; i++) //aparece un enemigo hasta llegar al limite
+        for (int i = 0; i < cantidadMaxima; i++)
         {
             SpawnearEnemigo();
         }
@@ -30,8 +30,7 @@ public class SpawnerDeEnemigos : MonoBehaviour
 
         GameObject nuevoEnemigo = Instantiate(enemigoPrefab, spawnPosition, Quaternion.identity);
         
-        // Referencia al script de enemigo para que notifique cuando muera
-        //aqui debes poner el de tus enemigos
+      
         Enemigo scriptEnemigo = nuevoEnemigo.GetComponent<Enemigo>();
         scriptEnemigo.spawner = this;
 
@@ -44,7 +43,7 @@ public class SpawnerDeEnemigos : MonoBehaviour
         StartCoroutine(RespawnEnemigo());
     }
 
-    private IEnumerator RespawnEnemigo() //tiempo que tarda en aparecer
+    private IEnumerator RespawnEnemigo() 
     {
         yield return new WaitForSeconds(tiempoRespawn);
         SpawnearEnemigo();

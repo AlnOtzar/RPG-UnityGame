@@ -8,10 +8,11 @@ public class VidasPlayer : MonoBehaviour
     public movPlayer movimientoPlayer;
     public int defensa = 1;
     [Header("energia")]
-
+    public Image enegiaPlayer;
+    private float anchoEnergiaPlayer;
     public int energiaActual;
-
     public int energiaMax = 20;
+    public TextMeshProUGUI textoEnergia;
 
     [Header("Vida")]
     public Image vidaPlayer;
@@ -39,12 +40,15 @@ public class VidasPlayer : MonoBehaviour
     void Start()
     {
         anchoVidasPlayer = vidaPlayer.GetComponent<RectTransform>().sizeDelta.x;
+        anchoEnergiaPlayer = enegiaPlayer.GetComponent<RectTransform>().sizeDelta.x;
         haMuerto = false;
         vidaActual = vidasMax;
+        energiaActual = energiaMax;
 
         gameOver.SetActive(false);
         ActualizarUI();
         DibujaVida(vidaActual);
+        DibujaEnergia(energiaActual);
     }
 
     public void TomarDaño(int daño)
@@ -85,6 +89,16 @@ public class VidasPlayer : MonoBehaviour
             vidaPlayer.color = Color.yellow;
         else
             vidaPlayer.color = new Color(.14f, 0.72f, 0.071f);
+    }
+
+    public void DibujaEnergia(int energia)
+    {
+        if (enegiaPlayer == null) return;
+
+        RectTransform rt = enegiaPlayer.GetComponent<RectTransform>();
+        float porcentajeEnergia = (float)Mathf.Min(energia, energiaMax) / energiaMax;
+
+        rt.sizeDelta = new Vector2(anchoEnergiaPlayer * porcentajeEnergia, rt.sizeDelta.y);
     }
 
     IEnumerator EjecutaMuerte()
@@ -153,5 +167,8 @@ public class VidasPlayer : MonoBehaviour
 
         if (textoVida != null)
             textoVida.text = $"{vidaActual} / {vidasMax}";
+            
+        if (textoEnergia != null)
+            textoEnergia.text = $"{energiaActual} / {energiaMax}";
     }
 }
