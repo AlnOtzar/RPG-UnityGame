@@ -33,6 +33,10 @@ TagManager:
   - gemaRoja
   - Arma
   - Enemigos
+  - Vida
+  - Mana
+  - Defensa
+  - Ataque
   layers:
   - Default
   - TransparentFX

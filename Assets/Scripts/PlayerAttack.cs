@@ -82,7 +82,7 @@ public class PlayerAttack : MonoBehaviour
 
         GameObject obj = Instantiate(flecha);
 
-        obj.transform.position = transform.position + new Vector3(direction.x, direction.y, 0) * 0.5f;
+        obj.transform.position = transform.position + new Vector3(direction.x, direction.y, 0) * 2f;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         obj.transform.rotation = Quaternion.Euler(0, 0, angle);

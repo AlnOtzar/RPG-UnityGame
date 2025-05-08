@@ -7,6 +7,11 @@ public class VidasPlayer : MonoBehaviour
 {
     public movPlayer movimientoPlayer;
     public int defensa = 1;
+    [Header("energia")]
+
+    public int energiaActual;
+
+    public int energiaMax = 20;
 
     [Header("Vida")]
     public Image vidaPlayer;
@@ -124,7 +129,9 @@ public class VidasPlayer : MonoBehaviour
     {
         nivel++;
         vidasMax += 10;
+        energiaMax += 10;
         vidaActual = vidasMax;
+        energiaActual = energiaMax;
 
         if (Random.value <= 0.3f)
             defensa += 1;
@@ -136,7 +143,7 @@ public class VidasPlayer : MonoBehaviour
         DibujaVida(vidaActual);
     }
 
-    void ActualizarUI()
+    public void ActualizarUI()
     {
         if (textoNivel != null)
             textoNivel.text = $"Nivel: {nivel}";
