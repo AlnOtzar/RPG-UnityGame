@@ -70,11 +70,21 @@ public class Inventario : MonoBehaviour
          
     }
 
-    public Items GetSelectedItem(){
+    public Items GetSelectedItem(bool usando){
         InventarioSlot slot = inventarioSlots[selectedSlot];
         ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
             if (itemEnSlot != null) {
-                return itemEnSlot.items;
+                Items item = itemEnSlot.items;
+                if (usando == true){
+                    itemEnSlot.count--;
+                    if (itemEnSlot.count <= 0){
+                        Destroy(itemEnSlot.gameObject);
+                    } else {
+                        itemEnSlot.RecargarContador();
+                    }
+
+                }
+                return item;
             }
 
             return null;
