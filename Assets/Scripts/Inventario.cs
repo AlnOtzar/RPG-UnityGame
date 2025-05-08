@@ -9,6 +9,30 @@ public class Inventario : MonoBehaviour
     public InventarioSlot[] inventarioSlots;
     public GameObject inventarioItemPrefab;
 
+    int selectedSlot = -1;
+
+    private void Start(){
+        CambioSeleccionSlot(0);
+    }
+
+    private void Update(){
+        if (Input.inputString != null){
+            bool IsNumero = int.TryParse(Input.inputString, out int number);
+            if (IsNumero && number > 0 && number < 4) {
+                CambioSeleccionSlot(number - 1);
+            }
+        }
+    }
+
+    void CambioSeleccionSlot(int newValue) {
+        if (selectedSlot >= 0){
+            inventarioSlots[selectedSlot].Deselect();    
+        }
+        
+        inventarioSlots[newValue].Select();
+        selectedSlot = newValue;
+    }
+
     public bool AgregarItem(Items items){
         
         // revisa si un slot tiene un item mas de una vez
@@ -18,8 +42,8 @@ public class Inventario : MonoBehaviour
 
             if (itemEnSlot != null && 
                 itemEnSlot.items == items &&
-                itemEnSlot.count < maxStackItems){
-
+                itemEnSlot.count < maxStackItems &&
+                itemEnSlot.items.stackable == true){
                 itemEnSlot.count++;
                 itemEnSlot.RecargarContador();
                 return true;
@@ -44,6 +68,16 @@ public class Inventario : MonoBehaviour
         ColeccionablesPlayer item = newItemGo.GetComponent<ColeccionablesPlayer>();
         item.InicializarItem(items); 
          
+    }
+
+    public Items GetSelectedItem(){
+        InventarioSlot slot = inventarioSlots[selectedSlot];
+        ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+            if (itemEnSlot != null) {
+                return itemEnSlot.items;
+            }
+
+            return null;
     }
 
 }
