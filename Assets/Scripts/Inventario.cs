@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Inventario : MonoBehaviour
 {
     public int maxStackItems = 9;
+    public int maxStackMonedas = 999;
     public InventarioSlot[] inventarioSlots;
     public GameObject inventarioItemPrefab;
 
@@ -41,12 +42,15 @@ public class Inventario : MonoBehaviour
             ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
 
             if (itemEnSlot != null && 
-                itemEnSlot.items == items &&
-                itemEnSlot.count < maxStackItems &&
+                itemEnSlot.items == items && 
                 itemEnSlot.items.stackable == true){
-                itemEnSlot.count++;
-                itemEnSlot.RecargarContador();
-                return true;
+                    int limiteStack = itemEnSlot.items.esMoneda ? maxStackMonedas : maxStackItems;
+
+                    if(itemEnSlot.count < limiteStack){
+                        itemEnSlot.count++;
+                        itemEnSlot.RecargarContador();
+                        return true;
+                    }                
             }
         }
 
@@ -69,6 +73,51 @@ public class Inventario : MonoBehaviour
         item.InicializarItem(items); 
          
     }
+
+    public int ObtenerCantidadMonedas(Items moneda){
+        int total = 0;
+        foreach (var slot in inventarioSlots){
+            ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+            if (itemEnSlot != null && itemEnSlot.items == moneda)
+{
+                total += itemEnSlot.count;
+            }
+        }
+        return total;
+    }
+
+    
+    public bool GastarMonedas(Items monedaItem, int cantidad) {
+    int total = ObtenerCantidadMonedas(monedaItem);
+    if (total < cantidad) return false;
+
+    int restante = cantidad;
+
+    // Resta monedas desde los slots disponibles
+    foreach (var slot in inventarioSlots) {
+        ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+            if (itemEnSlot != null && itemEnSlot.items == monedaItem) {
+                if (itemEnSlot.count >= restante) {
+                    itemEnSlot.count -= restante;
+                    if (itemEnSlot.count == 0) {
+                        Destroy(itemEnSlot.gameObject);
+                    } else {
+                        itemEnSlot.RecargarContador();
+                    }
+                    return true;
+                } else {
+                    restante -= itemEnSlot.count;
+                    Destroy(itemEnSlot.gameObject);
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
+    
 
     public Items GetSelectedItem(bool usando){
         InventarioSlot slot = inventarioSlots[selectedSlot];

@@ -16,6 +16,7 @@ public class Items : ScriptableObject
 
     [Header("Solo UI")]
     public bool stackable = true;
+    public bool esMoneda = false;
 
     [Header("Ambos")]
     public Sprite image;
