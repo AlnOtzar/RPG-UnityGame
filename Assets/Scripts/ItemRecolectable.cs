@@ -1,16 +1,26 @@
 using UnityEngine;
 
-public class ItemRecolectable : MonoBehaviour
+public class ItemRecolectable : MonoBehaviour 
 {
-    public Items item; // Campo para asignar el ScriptableObject
+    // Campo oculto en el Inspector pero asignable por código
+    [HideInInspector] public Items itemSO;
+
+    void Start()
+    {
+        // Asigna el sprite automáticamente si hay un SO
+        if (itemSO != null && itemSO.image != null)
+        {
+            GetComponent<SpriteRenderer>().sprite = itemSO.image;
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && item != null)
+        if (other.CompareTag("Player") && itemSO != null)
         {
-            if (Inventario.instance.AgregarItem(item))
+            if (Inventario.instance.AgregarItem(itemSO))
             {
-                Debug.Log($"¡{item.name} recogido!");
+                Debug.Log($"¡{itemSO.name} recogido!");
                 Destroy(gameObject);
             }
         }

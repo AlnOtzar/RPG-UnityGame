@@ -17,4 +17,5 @@ MonoBehaviour:
   tipoDeAccion: 0
   rango: {x: 5, y: 4}
   stackable: 1
+  esMoneda: 0
   image: {fileID: -1010345531685186254, guid: 78579d269e4b7784aabfde0fe20160c3, type: 3}
