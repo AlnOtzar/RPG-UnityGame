@@ -75,16 +75,18 @@ public class Inventario : MonoBehaviour
     }
 
     public int ObtenerCantidadMonedas(Items moneda){
-        int total = 0;
-        foreach (var slot in inventarioSlots){
-            ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
-            if (itemEnSlot != null && itemEnSlot.items == moneda)
-{
-                total += itemEnSlot.count;
-            }
+    int total = 0;
+    Debug.Log("Buscando monedas del tipo: " + moneda.name);
+    foreach (var slot in inventarioSlots){
+        ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+        if (itemEnSlot != null && itemEnSlot.items == moneda){
+            Debug.Log("Encontrado slot con " + itemEnSlot.count + " monedas del tipo: " + itemEnSlot.items.name);
+            total += itemEnSlot.count;
         }
-        return total;
     }
+    return total;
+}
+
 
     
     public bool GastarMonedas(Items monedaItem, int cantidad) {
