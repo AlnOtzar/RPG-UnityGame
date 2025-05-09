@@ -9,8 +9,23 @@ public class Inventario : MonoBehaviour
     public int maxStackMonedas = 999;
     public InventarioSlot[] inventarioSlots;
     public GameObject inventarioItemPrefab;
+    public static Inventario instance;
+
 
     int selectedSlot = -1;
+
+     void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start(){
         CambioSeleccionSlot(0);

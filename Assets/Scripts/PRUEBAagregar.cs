@@ -7,22 +7,23 @@ public class PRUEBAagregar : MonoBehaviour
     public Items monedaItem; // este debe ser el ítem tipo moneda
     public int costo = 100;   // cuántas monedas cuesta el item
 
+    
 
-    private void OnTriggerEnter2D(Collider2D other){
-    if (other.CompareTag("Player")){
-        Inventario inventoryManager = other.GetComponentInChildren<Inventario>();
 
-        if (inventoryManager != null)
-        {
+    private void OnTriggerEnter2D(Collider2D other) {
+    if (other.CompareTag("Player")) {
+        inventoryManager = other.GetComponentInChildren<Inventario>();
+
+        if (inventoryManager != null && monedaItem != null) {
             int monedasDisponibles = inventoryManager.ObtenerCantidadMonedas(monedaItem);
             
-            if (monedasDisponibles >= costo){
+            if (monedasDisponibles >= costo) {
                 bool pago = inventoryManager.GastarMonedas(monedaItem, costo);
 
-                if (pago){
+                if (pago) {
                     bool result = inventoryManager.AgregarItem(itemsToPickup[0]);
 
-                    if (result){
+                    if (result) {
                         Debug.Log("ITEM COMPRADO Y AGREGADO");
                         Destroy(gameObject); 
                     } else {
@@ -34,9 +35,12 @@ public class PRUEBAagregar : MonoBehaviour
             } else {
                 Debug.Log("No tienes suficientes monedas");
             }
+        } else {
+            Debug.LogWarning("Inventario o monedaItem no asignados.");
         }
     }
 }
+
 
 
     public void PickupItem(int id) {    
