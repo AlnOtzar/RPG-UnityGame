@@ -17,7 +17,7 @@ public class GemasMejoras : MonoBehaviour
                     estadisticas.DibujaVida(estadisticas.vidaActual);
                     break;
                 case "Mana":
-                    estadisticas.energiaMax += 5; // Ajusta según tu lógica
+                    estadisticas.energiaMax += 5;
                     estadisticas.ActualizarUI();
                     break;
                 case "Defensa":

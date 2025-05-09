@@ -133,7 +133,6 @@ public class Enemigo : MonoBehaviour
             {
                 Instantiate(prefabDropEnemigo, transform.position + Vector3.right * 0.3f, Quaternion.identity);
             }
-
             int cantidadMonedas = Random.Range(1, 3);
             for (int i = 0; i < cantidadMonedas; i++)
             {

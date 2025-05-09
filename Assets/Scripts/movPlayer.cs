@@ -6,6 +6,8 @@ public class movPlayer : MonoBehaviour
 {
     private Animator anim;
     public GameObject[] personajes; 
+    private Vector2 ultimaDireccion = Vector2.down; // Por ejemplo, mirando hacia abajo al inicio
+
     private int indicePersonaje = 0; 
 
     private bool puedeMoverse = true;
@@ -18,10 +20,6 @@ public class movPlayer : MonoBehaviour
     public Rigidbody2D rb;
 
     public bool estaMuerto = false;
-    private string capaIdle = "idle";
-    private string capaCaminar = "Caminar";
-    private bool PlayerMoviendose = false;
-    private float ultimoMovX, ultimoMovY;
 
     private PlayerAttack playerAttack;
 
@@ -56,63 +54,46 @@ public class movPlayer : MonoBehaviour
         float velocidadActual = estaCorriendo ? velocidadCorrer : velocidadNormal;
 
         rb.linearVelocity = dirMov * velocidadActual;
-
-        if (movX == 0 && movY == 0)
-        {
-            PlayerMoviendose = false;
-        }
-        else
-        {
-            PlayerMoviendose = true;
-            ultimoMovX = movX;
-            ultimoMovY = movY;
-        }
-
-        ActualizaCapa();
-    }
-
-    private void ActualizaCapa()
-    {
-        if (PlayerMoviendose)
-        {
-            activaCapa(capaCaminar);
-        }
-        else
-        {
-            activaCapa(capaIdle);
-        }
-    }
-
-    private void activaCapa(string nombre)
-    {
-        if (anim == null) return;
-
-        for (int i = 0; i < anim.layerCount; i++)
-        {
-            anim.SetLayerWeight(i, 0);
-        }
-
-        anim.SetLayerWeight(anim.GetLayerIndex(nombre), 1);
     }
 
     private void Animacionesplayer()
     {
-        if (playerAttack.IsAttacking()) return;
+        if (anim == null || playerAttack.IsAttacking()) return;
 
-        anim.SetFloat("movX", ultimoMovX);
-        anim.SetFloat("movY", ultimoMovY);
-        anim.SetBool("corriendo", estaCorriendo); 
+        float minUmbral = 0.1f;
+        Vector2 mov = dirMov;
+
+        // Detecta si hay movimiento significativo
+        if (mov.magnitude >= minUmbral)
+        {
+            ultimaDireccion = mov;
+        }
+        else
+        {
+            mov = Vector2.zero;
+        }
+
+        // Parámetros para blend trees de caminar y correr
+        anim.SetFloat("movX", mov.x);
+        anim.SetFloat("movY", mov.y);
+
+        // Parámetros para el blend tree de Idle (no cambian aunque el jugador se detenga)
+        anim.SetFloat("idleX", ultimaDireccion.x);
+        anim.SetFloat("idleY", ultimaDireccion.y);
+
+        anim.SetBool("corriendo", estaCorriendo);
+        bool estaCaminando = mov != Vector2.zero && !estaCorriendo;
+        anim.SetBool("caminando", estaCaminando);
     }
+
+
+
+
 
     public void BloquearMovimiento(bool estado)
     {
         puedeMoverse = !estado;
         rb.linearVelocity = Vector2.zero;
-    }
-
-    public Vector2 GetUltimaDireccion()
-    {
-        return new Vector2(ultimoMovX, ultimoMovY);
     }
 
     private void ActivarPersonajeActual()
@@ -140,7 +121,13 @@ public class movPlayer : MonoBehaviour
         indicePersonaje = (indicePersonaje + 1) % personajes.Length;
 
         personajes[indicePersonaje].SetActive(true);
-
         anim = personajes[indicePersonaje].GetComponent<Animator>();
+
+        anim.SetFloat("idleX", ultimaDireccion.x);
+        anim.SetFloat("idleY", ultimaDireccion.y);
+        anim.SetFloat("movX", dirMov.x);
+        anim.SetFloat("movY", dirMov.y);
+        anim.SetBool("corriendo", estaCorriendo);
     }
+
 }
