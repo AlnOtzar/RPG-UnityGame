@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2532579105080603739}
   - component: {fileID: 584683965384817649}
   - component: {fileID: 8192123442156876700}
+  - component: {fileID: 8869364288938672071}
   m_Layer: 0
   m_Name: DropRata
   m_TagString: Untagged
@@ -132,7 +133,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3697255223323844045}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1525e5fc6e9ca240931c55d174d032f, type: 3}
   m_Name: 
@@ -140,3 +141,22 @@ MonoBehaviour:
   inventoryManager: {fileID: 0}
   itemsToPickup:
   - {fileID: 11400000, guid: fd5974550239420438aa1aee9bca8d60, type: 2}
+  monedaItem: {fileID: 0}
+  costo: 100
+--- !u!114 &8869364288938672071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3697255223323844045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f07731a8f80ace48adcc3cfb74669c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemCaido: {fileID: 0}
+  itemsTomar:
+  - {fileID: 11400000, guid: fd5974550239420438aa1aee9bca8d60, type: 2}
+  monedaItem: {fileID: 11400000, guid: 487847ebcc7b3b7499a3dcf19bf7ec0f, type: 2}
+  precios: 00000000

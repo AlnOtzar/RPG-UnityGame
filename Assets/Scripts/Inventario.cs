@@ -8,24 +8,24 @@ public class Inventario : MonoBehaviour
     public int maxStackItems = 9;
     public int maxStackMonedas = 999;
     public InventarioSlot[] inventarioSlots;
-    public GameObject inventarioItemPrefab;
+    public GameObject[] inventarioItemPrefab;
     public static Inventario instance;
 
 
     int selectedSlot = -1;
 
-     void Awake()
+    void Awake()
+{
+    if (transform.parent == null) // Confirmamos que es root
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        DontDestroyOnLoad(gameObject);
     }
+    else
+    {
+        Debug.LogWarning("DontDestroyOnLoad solo se puede aplicar a objetos raíz.");
+    }
+}
+
 
     private void Start(){
         CambioSeleccionSlot(0);
@@ -82,12 +82,65 @@ public class Inventario : MonoBehaviour
         return false;
     }
 
+    public bool AgregarItemDelSuelo(Items items){
+        
+        // revisa si un slot tiene un item mas de una vez
+        for (int i = 0; i < inventarioSlots.Length; i++){
+            InventarioSlot slot = inventarioSlots[i];
+            ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+
+            if (itemEnSlot != null && 
+                itemEnSlot.items == items && 
+                itemEnSlot.items.stackable == true){
+                    int limiteStack = itemEnSlot.items.esMoneda ? maxStackMonedas : maxStackItems;
+
+                    if(itemEnSlot.count < limiteStack){
+                        itemEnSlot.count++;
+                        itemEnSlot.RecargarContador();
+                        return true;
+                    }                
+            }
+        }
+
+        // busca un espacio vacio
+        for (int i = 0; i < inventarioSlots.Length; i++){
+            InventarioSlot slot = inventarioSlots[i];
+            ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+
+            if (itemEnSlot == null){
+                SpawnNuevoItem(items, slot);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void  SpawnNuevoItem (Items items, InventarioSlot slot){
-        GameObject newItemGo = Instantiate(inventarioItemPrefab, slot.transform);
+        GameObject prefab = ObtenerPrefabCorrespondiente(items);
+        if (prefab == null) {
+            Debug.LogWarning("No se encontró un prefab para el item: " + items.name);
+            return;
+        }
+
+        GameObject newItemGo = Instantiate(prefab, slot.transform);
         ColeccionablesPlayer item = newItemGo.GetComponent<ColeccionablesPlayer>();
         item.InicializarItem(items); 
-         
+
     }
+
+    private GameObject ObtenerPrefabCorrespondiente(Items items) {
+        foreach (GameObject prefab in inventarioItemPrefab) {
+            ColeccionablesPlayer cp = prefab.GetComponent<ColeccionablesPlayer>();
+            if (cp != null && cp.items == items) {
+                return prefab;
+            }
+        }
+        return null; // no se encontró prefab correspondiente
+        Debug.LogError("¡NO HAY PREFAB CORRESPONDIENTE");
+
+    }
+
+
 
     public int ObtenerCantidadMonedas(Items moneda){
     int total = 0;
@@ -105,20 +158,21 @@ public class Inventario : MonoBehaviour
 
     
     public bool GastarMonedas(Items monedaItem, int cantidad) {
-    int total = ObtenerCantidadMonedas(monedaItem);
-    if (total < cantidad) return false;
 
-    int restante = cantidad;
+        int total = ObtenerCantidadMonedas(monedaItem);
+        if (total < cantidad) return false;
 
-    // Resta monedas desde los slots disponibles
-    foreach (var slot in inventarioSlots) {
-        ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
-            if (itemEnSlot != null && itemEnSlot.items == monedaItem) {
-                if (itemEnSlot.count >= restante) {
-                    itemEnSlot.count -= restante;
-                    if (itemEnSlot.count == 0) {
-                        Destroy(itemEnSlot.gameObject);
-                    } else {
+        int restante = cantidad;
+
+        // Resta monedas desde los slots disponibles
+        foreach (var slot in inventarioSlots) {
+            ColeccionablesPlayer itemEnSlot = slot.GetComponentInChildren<ColeccionablesPlayer>();
+                if (itemEnSlot != null && itemEnSlot.items == monedaItem) {
+                    if (itemEnSlot.count >= restante) {
+                        itemEnSlot.count -= restante;
+                        if (itemEnSlot.count == 0) {
+                            Destroy(itemEnSlot.gameObject);
+                        } else {
                         itemEnSlot.RecargarContador();
                     }
                     return true;

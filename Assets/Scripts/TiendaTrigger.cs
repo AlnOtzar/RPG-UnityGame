@@ -38,18 +38,21 @@ public class TiendaTrigger : MonoBehaviour
             }
         }
 
-        // Cerrar tienda con ESC
-        if (menuTienda != null && menuTienda.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        // Cerrar tienda con ESC y T
+        if (menuTienda != null && menuTienda.activeSelf 
+            && Input.GetKeyDown(KeyCode.Escape) && Input.GetKeyDown(KeyCode.T))
         {
             CerrarTienda();
         }
 
-        
-    if (Input.GetKeyDown(KeyCode.M))
+    //tecla para generar monedas (ELIMINAR)
+    if (Input.GetKeyDown(KeyCode.M)) 
     {
         Inventario.instance.AgregarItem(monedaItem);
         Debug.Log($"Monedas actuales: {Inventario.instance.ObtenerCantidadMonedas(monedaItem)}");
     }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
