@@ -14,18 +14,18 @@ public class Inventario : MonoBehaviour
 
     int selectedSlot = -1;
 
-    void Awake()
-{
-    if (transform.parent == null) // Confirmamos que es root
+     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-    else
-    {
-        Debug.LogWarning("DontDestroyOnLoad solo se puede aplicar a objetos raíz.");
-    }
-}
-
 
     private void Start(){
         CambioSeleccionSlot(0);
@@ -136,7 +136,7 @@ public class Inventario : MonoBehaviour
             }
         }
         return null; // no se encontró prefab correspondiente
-        Debug.LogError("¡NO HAY PREFAB CORRESPONDIENTE");
+        Debug.LogError("¡NO HAY PREFAB CORRESPON");
 
     }
 

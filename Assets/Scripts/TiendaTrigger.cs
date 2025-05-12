@@ -33,20 +33,23 @@ public class TiendaTrigger : MonoBehaviour
             if (menuTienda != null)
             {
                 menuTienda.SetActive(true);
-                Time.timeScale = 0f;
+                // Time.timeScale = 0f;
                 Debug.Log("Tienda abierta (Juego pausado)");
             }
         }
 
         // Cerrar tienda con ESC y T
-        if (menuTienda != null && menuTienda.activeSelf 
-            && Input.GetKeyDown(KeyCode.Escape) && Input.GetKeyDown(KeyCode.T))
+        if (menuTienda != null && 
+        menuTienda.activeSelf && 
+        (Input.GetKeyDown(KeyCode.Escape) || 
+        Input.GetKeyDown(KeyCode.T)))
         {
             CerrarTienda();
         }
 
-    //tecla para generar monedas (ELIMINAR)
-    if (Input.GetKeyDown(KeyCode.M)) 
+
+
+    if (Input.GetKeyDown(KeyCode.M)) //tecla para generar monedas (ELIMINAR)
     {
         Inventario.instance.AgregarItem(monedaItem);
         Debug.Log($"Monedas actuales: {Inventario.instance.ObtenerCantidadMonedas(monedaItem)}");
@@ -79,7 +82,7 @@ public class TiendaTrigger : MonoBehaviour
         if (menuTienda != null)
         {
             menuTienda.SetActive(false);
-            Time.timeScale = 1f;
+            // Time.timeScale = 1f;
             Debug.Log("Tienda cerrada (Juego reanudado)");
         }
     }
@@ -129,11 +132,11 @@ public class TiendaTrigger : MonoBehaviour
         if (Inventario.instance.ObtenerCantidadMonedas(monedaItem) >= precio)
         {
             bool pagoExitoso = Inventario.instance.GastarMonedas(monedaItem, precio);
-            
+
             if (pagoExitoso)
             {
                 bool agregado = Inventario.instance.AgregarItem(item);
-                
+
                 if (agregado)
                 {
                     Debug.Log($"¡Éxito! {item.name} comprado por {precio} monedas");
