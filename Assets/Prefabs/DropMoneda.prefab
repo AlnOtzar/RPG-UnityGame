@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4502521953155274154}
   - component: {fileID: 7234327654763835225}
   - component: {fileID: 2091444913094345374}
-  - component: {fileID: 546841170035614697}
+  - component: {fileID: 3713909890537460738}
+  - component: {fileID: 3023247152388337251}
   m_Layer: 0
   m_Name: DropMoneda
   m_TagString: Untagged
@@ -113,7 +114,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 6954989885114920480, guid: 920228462d595c8498ce0bf39ca01516, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -125,7 +126,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &546841170035614697
+--- !u!114 &3713909890537460738
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,9 +135,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 450680589068043548}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f07731a8f80ace48adcc3cfb74669c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemCaido: {fileID: 0}
+  itemsTomar:
+  - {fileID: 11400000, guid: 487847ebcc7b3b7499a3dcf19bf7ec0f, type: 2}
+  monedaItem: {fileID: 11400000, guid: 487847ebcc7b3b7499a3dcf19bf7ec0f, type: 2}
+  precios: 00000000
+--- !u!114 &3023247152388337251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450680589068043548}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1525e5fc6e9ca240931c55d174d032f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryManager: {fileID: 0}
   itemsToPickup:
   - {fileID: 11400000, guid: 487847ebcc7b3b7499a3dcf19bf7ec0f, type: 2}
+  monedaItem: {fileID: 0}
+  costo: 0
