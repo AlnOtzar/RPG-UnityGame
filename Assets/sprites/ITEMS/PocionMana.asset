@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc367d9764151064e94b6cd0de3c2a54, type: 3}
   m_Name: PocionMana
   m_EditorClassIdentifier: 
+  nombre: "Pocion de Man\xE1"
   tile: {fileID: 0}
   tipo: 0
   tipoDeAccion: 1
   rango: {x: 5, y: 4}
+  cantidadEfecto: 10
   stackable: 1
   image: {fileID: -4928444794772000843, guid: 8bd12313e88cb5a4eaadfd51186249de, type: 3}

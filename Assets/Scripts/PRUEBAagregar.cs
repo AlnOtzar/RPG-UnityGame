@@ -1,75 +1,86 @@
- using UnityEngine;
+using UnityEngine;
 
 public class PRUEBAagregar : MonoBehaviour
 {
     public Inventario inventoryManager;
     public Items[] itemsToPickup;
-    public Items monedaItem; // este debe ser el ítem tipo moneda
-    public int costo = 100;   // cuántas monedas cuesta el item
 
-    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Inventario inventoryManager = other.GetComponentInChildren<Inventario>();
+            PlayerMonedas playerMonedas = other.GetComponent<PlayerMonedas>();
 
+            if (itemsToPickup.Length > 0)
+            {
+                Items item = itemsToPickup[0];
 
-    private void OnTriggerEnter2D(Collider2D other) {
-    if (other.CompareTag("Player")) {
-        inventoryManager = other.GetComponentInChildren<Inventario>();
-
-        if (inventoryManager != null && monedaItem != null) {
-            int monedasDisponibles = inventoryManager.ObtenerCantidadMonedas(monedaItem);
-            
-            if (monedasDisponibles >= costo) {
-                bool pago = inventoryManager.GastarMonedas(monedaItem, costo);
-
-                if (pago) {
-                    bool result = inventoryManager.AgregarItem(itemsToPickup[0]);
-
-                    if (result) {
-                        Debug.Log("ITEM COMPRADO Y AGREGADO");
-                        Destroy(gameObject); 
-                    } else {
-                        Debug.Log("No se pudo agregar el item al inventario");
-                    }
-                } else {
-                    Debug.Log("No se pudo realizar el pago");
+                // Si es moneda, suma también
+                if (item.nombre == "Moneda" && playerMonedas != null)
+                {
+                    playerMonedas.AgregarMonedas(1);
+                    Debug.Log("Moneda recogida y sumada al contador");
                 }
-            } else {
-                Debug.Log("No tienes suficientes monedas");
+
+                // Intenta agregar al inventario (ya sea moneda u otro item)
+                if (inventoryManager != null)
+                {
+                    bool result = inventoryManager.AgregarItem(item);
+                    if (result)
+                    {
+                        Debug.Log("ITEM AGREGADO AL INVENTARIO");
+                        Destroy(gameObject);
+                    }
+                    else
+                    {
+                        Debug.Log("Item NO agregado (inventario lleno)");
+                    }
+                }
             }
-        } else {
-            Debug.LogWarning("Inventario o monedaItem no asignados.");
         }
     }
-}
 
 
+    // Métodos para pruebas o para llamados desde UI
 
-    public void PickupItem(int id) {    
+    public void PickupItem(int id)
+    {
         bool result = inventoryManager.AgregarItem(itemsToPickup[id]);
-
-        if(result == true){
+        if (result)
+        {
             Debug.Log("ITEM AGREGADO");
-        } else {
-            Debug.Log("item NO agregado");
+        }
+        else
+        {
+            Debug.Log("Item NO agregado");
         }
     }
 
-    public void GetSelectedItem(){
-        Items itemRecibido = inventoryManager.GetSelectedItem(false); 
-        if(itemRecibido != null) {
-            Debug.Log("item recibido: " + itemRecibido);
-        } else {
-            Debug.Log("item NO recibido");
+    public void GetSelectedItem()
+    {
+        Items itemRecibido = inventoryManager.GetSelectedItem(false);
+        if (itemRecibido != null)
+        {
+            Debug.Log("Item recibido: " + itemRecibido.nombre);
+        }
+        else
+        {
+            Debug.Log("Item NO recibido");
         }
     }
 
-    public void UseSelectedItem(){
-        Items itemRecibido = inventoryManager.GetSelectedItem(true); 
-        if(itemRecibido != null) {
-            Debug.Log("item usado: " + itemRecibido);
-        } else {
-            Debug.Log("item NO usado");
+    public void UseSelectedItem()
+    {
+        Items itemRecibido = inventoryManager.GetSelectedItem(true);
+        if (itemRecibido != null)
+        {
+            Debug.Log("Item usado: " + itemRecibido.nombre);
+            itemRecibido.Usar(GameObject.FindWithTag("Player")); // Aplica efecto
+        }
+        else
+        {
+            Debug.Log("Item NO usado");
         }
     }
-
-
 }

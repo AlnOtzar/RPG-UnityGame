@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc367d9764151064e94b6cd0de3c2a54, type: 3}
   m_Name: Moneda
   m_EditorClassIdentifier: 
+  nombre: Moneda
   tile: {fileID: 0}
-  tipo: 1
+  tipo: 0
   tipoDeAccion: 2
   rango: {x: 5, y: 4}
+  cantidadEfecto: 10
   stackable: 1
-  esMoneda: 1
   image: {fileID: 6954989885114920480, guid: 920228462d595c8498ce0bf39ca01516, type: 3}
